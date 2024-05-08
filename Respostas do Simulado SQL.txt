@@ -1,13 +1,13 @@
 Simulado SQL
 
 Questões
-1 - B
-2 - A
-3 - B
-4 - B
-5 - D
-6 - A
-7 - C
-8 - C
-9 - C
-10 - D
+1 - B Correto
+2 - A Correto
+3 - B Incorreto
+4 - B Incorreto
+5 - D Correto
+6 - A Correto
+7 - C Incorreto
+8 - C Correto
+9 - C Correto 
+10 - D Incorreto
