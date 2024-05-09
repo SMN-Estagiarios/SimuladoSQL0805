@@ -8,3 +8,96 @@
 8- C
 9- C
 10- B
+
+12 - No LAYER Cliente:
+    chave da tabela UF deveria ir para a tabela endereço por conta da Cardinalidade estando as cahves Endereco_IdEndereco Errada e a Endereco_IdCliente também, pois a tabela uf deve ser domínio
+    ou seja, a chave de Uf deve estar em endereço e o IdUf esta com o tipo de dados char(2) que deveria ser Tinyint
+    
+    EnderecoPadrao parace ser um atributo booleano que irá validar se aquele endereço é o que mais é pedido pelo cliente. No caso do Workbench o parametro 
+    para ser considerado boolean seria Tinyint (1), mas no SQL server é preferível utilizar um bit. 
+
+    Na tabela contato cliente deveria conter todos os seus valores com a possibilidade de nulo uma vez que, ao cadastrar o contato fixo da forma como esta modelado 
+    irá ocorrer uma repetição tanto do numero celular e o campo whatsapp
+
+    LAYER Pedido: 
+        se for desejado manter o padrão de char para a captura do mês e ano competência na tabela nota fiscal deverá o mesCompetência ser parametrizado com char(2)
+
+        tabela tipoStatus e Status poderia ser apenas uma tabela StatusPedido 
+
+        na tabela item_Pedido poderia contar um outro atributo de valor para se ter uma auditória do historico de preço daquele item ao longo do tempo além das notas fiscais que ja trariam ao menos
+        o valor total de todos os pedidos. 
+
+        Para que a tabela manute funcione para fazer uma auditoria da manipulação dos dados nesse sistema ela precisaria ter um id BIGINT para que por meio de triggers ela fosse sendo preenchida.
+        Contudo, ficaria um volume muito grande de dados para uma unica tabela sendo melhor colocar os atributos do manut nas tabelas que se desejam fazer tal auditoria 
+
+        o atributo Status poderia ser uma tabela domínio que passaria pelos diferentes status de uma entrega 
+
+    LAYER Motoboy:
+        TAbela entregador deveria conter a obrigatoriedade de cadastrar a placa do veiculo e o modelo também para controle do parceiro utilizador do sistema. 
+        Tipo do veiculo poderia ser uma tabela domínio com os valores  Moto, Bicicleta, 
+
+        Aumentaria o varchar do nome do Motoboy para (100)  
+
+        Atributo senha na tabela motoboy deveria ser varhcar(65) para estar em conformidade com a criptografia que Cliente irá receber para a senha  
+
+        Na tabela Contrato o atributo horario deveria ter o tipo de dado Tipo, ou então poderia ser feito DateTime para DataInicio e Fim pois o contrato se refere apenas 
+        a uma entrega quando o sistema solicitar e relacionar motoboy com restaurante. 
+
+
+    LAYER Restaurante 
+        na tabela ContatoRestaurante não necessita de uma tabela associativa com restaurante, pois isso implicaria com diferentes restaurantes poderia ter o mesmo id de contatoRestaurante.
+        então poderia ser eliminada essa tabela intermediária e ser feita uma ligação 1 p muitos de restaurante para contato
+
+        Ainda na tabela contato restaurante todos os atributos devem estar nuláveis pois se permanece assim, quando for incrementar um valor de email por exemplo,
+        seria necessário ou cadastrar os valores de fixo e whatsapp que já existem no banco de dados ou colocar com outro numero que também faça refernÊncia ao restaurante, 
+        o ponto é que não seria possível cadastrar um novo registro de email por meio de insert individualmente. 
+
+
+        
+ 
+    13. 1 - associação direta entre participante e evento a forma correta de representar essa situação será com uma tabela associativa entre Participante e Evento para efetuar a contagem requerida. 
+ 
+        2 - já existe um atributo data na tabela inscrição que garante a filtragem desses registros com o WHERE. 
+                
+        3 - Se as inscrição se relacionam apenas entre as palestras e Eventos deverá haver uma mudança pois a chave de evento deverá ir apenas para palestras e a tabela de inscrição deverá
+        conter ao inves da chave de Id_Evento receber o Id_Palestra e Id_Participante, mas caso a regra de negócio deixe explicito que dentro todos os participantes irão assistir todas as palestras parmaneceria como está contado apenas
+        os Id na tabela palestra que se relacionam com um mesmo evento
+        
+        4 -  como a chave de evento esta nas palestras, essa contagem pode ser feita utilizando um inner join entre palestra, Inscrição e Participante uma vez que se forem contado 
+        os distintos id_Evento na tabela palestra chegará ao resultado da contagem dos eventos que tiveram participação do participante, mas caso a modelagem, por conta da regra de negócio aceite
+        que todos os participantes de um evento assistam a todas aquelas palestras então a chave de evento estaria em inscrição que poderia ser sensibilizada com um trigger para que no insert de um registro 
+        inscrição fosse incrementada a contagem de inscrição para eventos 
+
+        6- para poder executar isso poderiamos ter um bit de atividade da inscrição que ao ser feito um update na tabela e o fizesse a validação que o bit mudou o valor para 0, ou seja, 
+        cancelado então mediante a ativação desse trigger promover um update na tabela pagamento mudando o Id do statusPagamento
+
+        7- Isso pode ser implementado acrescentando dataPrazo na tabela de inscrições que estabelece a data até quando esse valor deve ser feito, dai se não hover registro na tabela pagamento
+        para aquele id de inscrição quando o GETDATE() for maior que a data prazo, poderemos encontrar as inscrições que venceram seu prazo de pagamento e que ainda não foram pagas.
+
+        8 A tabela de pagamento poderia ter atributos adicionais como valor e data pagamento, Caso a dataInscrição não tenha quaisquer relação com 
+        a data do pagamento.
+        
+        9- o valor pendente a ser pago por cada inscrição pode ser considerado tanto pelo novo atributo de valor na tabela Inscrição quando não possuir registro de pagamento, 
+        quanto por meio de uma remodelagem na tabela pagamentos que assim que o bit de atividade da tabela Inscricao tiver seu valor como ativo, gerar um registro de pagamento com status pendente com o preenchimento da 
+         mediante a concretude do pagamento e consequente mudança de status daquele Id. 
+        
+        10 - Se consideramos o valor total devido podemos criar uma tabela associativa que possui o id_pagamento como Unique e esses id de pagamento serão referenciados a uma inscrição específica.
+        com essa tabela o status do pagamento da inscrição só terá sua mudança concretizada quando o valor total de registros de pagamento for igual ao valor da inscrição na tabela inscrição 
+
+        11 - Para efetuação desse Job de envio de emails semanalmente alertando os participante que possuem pagamento em atraso referente as suas inscrição poderiamos considerar o id_StatusPagamento sendo ligado diretamente na inscrição ao invés de pagamento 
+        pois ele iria mudar na tabela inscrições conforme houvessem incrementos nos registro de pagamento para aquele inscrição. mantendo também a tabela associativa entre pagamento e inscrição
+        
+        12- pode ser criado uma procedure para efetuar os pagamentos que iria inserir na tabela pagamento o valor, data e hora referente aquele pagamento. Quando houvesse esse insert 
+        um trigger deve ser disparado tendo como base os pagamentos realizados para uma inscrição, se ele tiver o valorPagamento = ValorInscrição fazer o update no Id_StatusPagamento na tabela inscrição
+
+        13 Criação da tabela Feedback 
+
+        criaçao da tabela certificacao
+        
+        essas ultimas duas tabelas ficaram pendentes na modelagem
+
+
+
+
+
+
