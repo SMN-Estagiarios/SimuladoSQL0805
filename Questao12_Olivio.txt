@@ -1,0 +1,69 @@
+12)
+    A princípio, todas as chaves primárias (PK) estão fora da convenção da SMN. Elas estão escritas com Id seguido do nome da tabela.
+    Na SMN, usamos apenas Id para as chaves primárias, sem a necessidade do nome da tabela Exemplo: IdCLiente.
+
+
+    - Módulo Restaurante:
+        Associativa entre Contato e Restaurante:
+            Não faz sentido termos essa associativa, pois um Restaurante pode ter muitos contatos, mas o mesmo contato não deve servir para vários restaurantes.
+    Cada contato deve pertencer a um restaurante. Sugiro eliminar a associativa e ligar diretamente o Restaurante à ContatoRestaurante, com a FK de restaurante na tabela ContatoRestaurante.
+
+        Tabela Restaurante:
+            O atributo HorarioFuncionamento está com o tipo equivocado. Sugiro que o tipo seja mudado para Time;
+            O atributo de Numero (na parte de endereço) pode ser nulo, pois é sabido que nem todos os imóveis possuem um número;
+
+
+    - Módulo Cliente:
+        Tabela SAC:
+            Acredito que se faz necessário ter o Id do restaurante nesta tabela, para conseguirmos referenciar qual restaurante será responsável por atender aquele chamado;
+            O atributo de NomeAtendente como NotNull impede o usuário de gerar alguma solicitação de atendimento sem especificar o atendente, causando um travamento ao tentar um atendimento;
+        
+        Associativa Cupom_Cliente:
+            Não vejo necessidade de uma associativa entre as entidades Cupom e Cliente, pois o Cliente, de fato, pode possuir muitos cupons, mas não vejo lógica em um cupom pertencer a muitos clientes;
+
+        Tabela Cupom:
+            Atributo DataAquisao está com o nome errado, sugiro trocar para DataAquisicao;
+            O campo de Valor está com o tipo DECIMAL(3,2). Não sei se a intenção do restaurante é de oferecer cupons de, no máximo R$ 9,99. Se for este o objetivo, tudo bem. Caso seja necessário gerar cupons de valores mais altos, aumentar o range da tipagem. Sugestão DECIMAL(4,2);
+
+        Tabela Endereço:
+            O atributo de Numero pode ser nulo, pois é sabido que nem todos os imóveis possuem um número;
+            Se faz necessário adicionar a Foreign Key da tabela UF na tabela de Endereço, para referenciar a qual Unidade da Federação pertence aquele endereço;
+            O atributo PontoReferencia está definido como NotNull, sendo o usuário obrigado a preencher este espaço. Acredito que pode ser alterado para Opcional, este atributo;
+
+        Tabela UF:
+            A Primary Key está com o tipo de CHAR(2). Uma sugestão é mudar a tipagem para TINYINT para aderir às boas práticas;
+            Alterar o nome do atributo de Nome para Sigla com tipo CHAR(2),
+            Adicionar o campo Nome para VARCHAR(50) para referenciar por extenso o nome da Unidade Federativa, caso seja necessário;
+            Eliminar as duas Foreign Keys da tabela UF, pois não são necessárias;
+
+        Tabela ContatoCliente:
+            O atributo WhatsApp está com tipagem errada (TINYINT). Sugiro mudar para o padrão que já está sendo usado nos outros atributos referentes a contatos (CHAR(11))
+
+
+    - Módulo Motoboy:
+        Tabela Contrato:
+            O atributo DataFim está definido como NotNull, gerando um impedimento na hora de gerar novos contratos, pois assim você já deveria registrar uma data de fim do contrato no momento da criação do mesmo;
+            O atributo Descrição com tipo VARCHAR(1000) está com limite exagerado. Podemos mudar a tipagem para TEXT, sendo possível ter um limite mais variado de caracteres neste campo;
+
+        Tabela Entregador:
+            O Atributo TipoVeiculo deveria ser uma tabela domínio para seguir as boas práticas;
+            Deveria também ter uma tabela de Veículo, para o entregador fazer o devido cadastro de seu veículo no sistema;
+            Atributo de ModeloVeiculo e Placa deverão estar contidas na Entidade Veículo (sugerida acima). Além de que estão definidos como Nullable, sendo possível registrar um veículo sem Modelo e sem Placa;
+            O atributo WhatsApp está com tipagem errada (TINYINT). Sugiro mudar para o padrão que já está sendo usado nos outros atributos referentes a contatos (CHAR(11));
+
+        Tabela Entrega:
+            Se faz necessário adicionar a Foreign Key de Pedido na tabela de entrega, para conseguirmos referenciar a qual pedido aquela entrega deve ser feita;
+            Atributo Status pode ser uma tabela domínio;
+
+
+    - Módulo Pedido: 
+        Tabela Pedido:
+            IdEntrega não precisa estar nesta tabela (como especifiquei anteriormente). Se faz necessário adicionar a foreign key de pedido à tabela de Entrega apenas;
+            IdCupom está como NotNull, sendo possível apenas fazer um pedido com cupom. Sugiro alterar este campo para Nullable, tornando opcional a possibilidade de adicionar um cupom ao pedido;
+            Os dois atributos finais de avaliação poderiam compor uma tabela domínio apenas para avaliações, economizando espaço no banco e separando dados específicos;
+
+        Tabela TipoStatus e Status:
+            Só precisamos de uma dessas tabelas para definir o status de um pedido, portanto sugiro eliminar a tabela TipoStatus e na tabela Status, eliminar a FK IdTipoStatus;
+
+        Tabela Manut:
+            Acredito que não é necessária uma tabela de Manut e sim adicionar estes atributos às entidades que necessitam dos dados de manutenção, como: Cliente, Pedido, Entrega, Restaurante, etc. Para assim registrar os dados de quem fez a manutenção em determinadas entidades;
