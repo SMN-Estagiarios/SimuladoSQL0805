@@ -1,0 +1,62 @@
+======================================
+GERAL
+======================================
+-O nome do atributo ID de todas as tabelas não necessitam conter o nome da tabelas
+exemplo: IdRestaurante pode ser apenas Id, em que a primeira nomeclatura deve ser apenas utilizada em FK
+OBS: está escrito "id" nos atributos, deve ser seguido o modelo PascalCase visto o padrão dos outros atributos
+-O Manut deve estar nas tabelas, e não em uma tabela a parte sem ligação
+
+======================================
+RESTAURANTE
+======================================
+Tabela Restaurante
+    -HorarioFuncionamento deve ser dividido entre HoraAbertura e HoraFechamento, ambos sendo TIME
+    -Rua poderia ser um pouco maior, como VARCHAR(60)
+    -Deve conter o UF como CHAR(2)
+
+Tabela ContatoRestaurante
+    -Ao invés de ter dois atributos para contato de telefone, pode-se ter apenas um chamado "Numero" sendo VARCHAR(11) e ter um atributo
+    "TipoContato" sendo CHAR(1) podendo ser F ou W
+    -O atributo Email pode ser removido dessa tabela e ser inserido em uma nova tabela "EmailRestaurante", com um restaurante podendo ter diversos emails
+
+======================================
+Motoboy
+======================================
+Tabela Entregador
+    -Nome deve ser VARCHAR(100)
+    -TipoCNH deve ser CHAR(1), visto que os tipos são A, B, C, D e E
+    -TipoVeiculo deve ser CHAR(1), podendo ser C ou M
+    -ModeloVeiculo pode ser reduzido para VARCHAR(20)
+    -Foto deve ser NOT NULL
+
+======================================
+Cliente
+======================================
+Tabela SAC
+    -Deveria ser criado uma tabela para atendente e ser passado o IdAtendente, ao invés do nome
+    -DataAtendimento poderia ser DATE e criar HoraInicio e HoraFim como TIME
+Tabela Cliente
+    -Atributos Nome e Sobrenome devem ser resumidos em Nome VARCHAR(100), sendo o padrão do resto da modelagem
+Tabela ContatoCliente
+    -Deve seguir a mesma lógica de ContatoRestaurante
+Tabela Endereco
+    -O nome da tabela deve ser EnderecoCliente
+Tabela UF
+    -Não vejo necessidade em uma tabela para UF, pode ser um atributo de EnderecoCliente
+
+======================================
+Pedido
+======================================
+Tabela TipoPagamento
+    -Remover Descricao e colocar Nome VARCHAR(20)
+    -Colocar atributo Desconto DECIMAL(4,3) sendo Nulável
+Tabela Entrega
+    -Deve conter DataInicioEntrega e DataFimEntrega como DATETIME
+    -Atributo Status deve virar uma tabela contendo as opções num VARCHAR(12) "Em andamento", "Concluida" e "Cancelada"
+    -AvaliacaoEntrega pode ser um CHAR(1) para 1 à 5 estrelas
+Tabelas Status e TipoStatus
+    -Pode ser resumido em uma tabela de Status contendo as opções "Em preparo", "Aguardando Motoboy", "Cancelado"
+Tabela NotaFiscal
+    -NomeEstabelecimento e CNPJ deve sair e deve ser passado o IdRestaurante
+Tabela Pedido
+    -Deve conter um atributo Codigo para possíveis auditorias

@@ -1,0 +1,13 @@
+=====================================
+Análise de Impacto
+=====================================
+
+A nova procedure spBuscarRelatorioGerencial tem como o objetivo trazer informações de milhões de títulos do relatório de liquidez efetiva para os períodos
+especificados pelo cliente, estes sendo 30, 60, 90, 120, 150 e 180 dias. Entretanto, vista à quantidade exorbitante de informações trazidas por essa procedure,
+faz-se extremamente necessário reduzir o tempo de processamento da chamada, mas também deve possuir os mesmos dados.
+
+Solução:
+    Para solucionar o problema citado acima, pode-se efetuar a criação de um índice não-clusterizado no CNPJ do Cedente em ATVTCEDE, a fim de acelerar a consulta da procedure
+
+Tabelas impactadas:
+    ATVTCEDE
