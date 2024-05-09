@@ -1,0 +1,66 @@
+Questão 14:
+Como a adição das informações de liquidez para diferentes períodos de tempo nos últimos
+180 dias pode impactar a eficiência e o desempenho do banco de dados, considerando a
+complexidade das operações de agrupamento e filtragem envolvidas, bem como a
+necessidade de cálculos adicionais para determinar a liquidez efetiva dos títulos?
+
+Contexto:
+O cliente X solicitou a inclusão de informações de liquidez para períodos específicos (30,
+60, 90, 120, 150 e 180 dias) em um relatório gerencial. Essas informações são derivadas da
+soma dos valores de liquidação de títulos com determinados tipos de baixa nos últimos
+180 dias. Os dados relevantes estão armazenados nas tabelas ATVTTITU (Titulo) e
+ATVTTOFI (TituloOperacaoFinanceira), com uma junção adicional com a tabela ATVTCEDE
+(Cedente). O cálculo da liquidez envolve a soma do ValorLiquidacao quando o TipoBaixa é
+1, 3, 5, 7 ou 9, e em seguida, dividir essa soma pelo ValorLiquidacao total multiplicado por
+100 para obter a liquidez efetiva.
+
+Detalhes Adicionais:
+A tabela ATVTTITU armazena informações sobre os títulos.
+A tabela ATVTTOFI contém dados sobre as operações financeiras relacionadas aos títulos.
+O cedente, que é a parte credora, é identificado pela coluna cede_cd_cgc_cpf na tabela ATVTTITU.
+O cálculo da liquidez é baseado na coluna tofi_vl_liquidacao (ValorLiquidacao) da tabela ATVTTOFI.
+A liquidez é calculada para diferentes períodos de tempo nos últimos 180 dias. 
+
+DECLARE @180dias_atras AS DATETIME = cast(current_timestamp - 180 AS date);
+SELECT  titu.cede_cd_cgc_cpf AS CnpjCedente,
+        CASE WHEN tofi_dt_pagamento > @180dias_atras
+            THEN tofi_vl_liquidacao
+            ELSE 0
+        END
+    FROM atvttitu titu WITH (NOLOCK)
+        INNER JOIN ATVTTOFI tofi WITH (NOLOCK)
+            ON titu.TITU_CD_SEQUENCIAL = tofi.TITU_CD_SEQUENCIAL
+    WHERE tofi_dt_pagamento > @180dias_atras OR tofi_dt_pagamento IS NULL;
+
+Obs.: A consulta atual fornece os valores de liquidação para os títulos nos últimos 180
+dias, mas não inclui o cálculo da liquidez efetiva para os diferentes períodos especificados
+pelo cliente.
+
+A tabela ATVTGERE é gerada por informações do sistema inteiro, em uma procedure
+complexa, que é rodada 1 vez por dia para “tirar uma foto” da situação atual. Depois é feito
+uma busca em cima desta tabela para agilizar as informações que são trazidas, e assim é
+montado o relatório gerencial.
+
+As informações de Liquidez devem ser adicionadas ao relatório gerencial. Para isto, uma
+das soluções seria concatenar os resultados de liquidez com o relatório, conforme a
+procedure no arquivo spBuscarRelatorioGerencial.sql
+
+No entanto, isto deixa a chamada do relatório mais pesada e demorada, uma vez que traz
+informações de milhões de títulos que agora são concatenados com o relatório “estático”.
+
+Faça uma análise de impacto sobre a situação acima. Sugira uma solução para que o
+relatório continue trazendo as informações de forma rápida, mas ainda possua as
+informações sobre a liquidez do período solicitado pelo cliente.
+
+Resposta:
+Como a solicitação do cliente é apenas o resultado do cálculo
+(((ValorLiquidacao1 + ValorLiquidacao3 + ValorLiquidacao5 + ValorLiquidacao7 + ValorLiquidacao9) / ValorLiquidacaoTotal) * 100)
+e, como mencionado no enunciado a chamada do relatório fica mais pesada e demorada
+ao concatenar os valores no relatório "estático", o ideal seria aproveitar que a tabela
+base ATVTGERE é alimentada diariamente e modificar a procedure que a alimenta,
+adicionando assim os dados do cálculo de liquidez.
+
+Para isso, seria necessário adicionar ao menos 6 colunas na tabela ATVTGERE, uma para cada período de 30 dias,
+que armazenarão os resultados do cálculo. Uma vez finalizado este processo, não será mais necessário
+utilizar a cte, pois ela descartaria o inner join entre Gerencial e Liquidados, pois com estas mudanças
+o gerencial já possuirá as informações solicitadas pelo cliente, que agora seriam apenas um select.
