@@ -1,0 +1,15 @@
+12. 
+- Não é necessário existir a tabela associativa Restaurante_ContatoRestaurante, 
+pois um contato só pode pertencer a um Restaurante.
+- Não é necessário existir a tabela Restaurante_Entregedor pois já tem uma tabela Contrato
+que engloba as informações dessa tabela associativa.
+- Deveria existir uma tabela associativa entre Item e Restaurante porque um item pode estar 
+presente em vários Restaurante e o Restaurante possui vários itens.
+- A tabela UF e Endereço estão ligadas erradas, o correto é 1 endereço só pertence a um estado e um estado possui
+vários endereços. O Id da tabela UF deveria ser do tipo Int ou Smallint.
+- Tabela Manut não está se ligando a nada e só está ocupando espaço desnecessário. Os atributos
+dessa tabela deveriam estar em todas as tabelas que necessitem de um histórico de criação e alteração de dados.
+- Tabela TipoStatus é desnecessária dentro do contexto atual.
+- Horário na tabela Contrato deveria ser do tipo Time, para melhorar esse atributo deveria ser 
+englobado pelo DataInicio e DataFim sendo os dois como DATETIME.
+- O atributo senha na tabela de Entregador também deveria ser em VARCHAR(64) como o de cliente.
