@@ -1,0 +1,17 @@
+12. 	* Padronização dos nomes de tabelas ('Cupom_Cliente' e 'ContatoCliente');
+	* Senha como varchar em Cliente abre uma questão problemática em segurança, caso o dado fosse guardado sem criptografia seria um problema;
+	* Tabela ContatoCliente existe um atributo Nulável com CHAR(10), basta BIT, a mesma coisa em Whatsapp
+	* UF é tabela domínio, portanto não deve ter FK, além de ter duas FKs onde uma é claramente errada (Endereco_idCliente)
+	* Erro de cardinalidade Cliente => NotaFiscal, um cliente pode possuir mais de um registro na tabela de nota fiscal (1:N). Porém, não há a necessidade dessa ligação visto que há como encontrar essa ligação através da tabela Pedido
+	* NotaFiscal possui atributo de MesCompetencia VARCHAR(10), sendo melhor um valor numérico (TINYINT)
+	* TipoStatus é tabela desnecessária
+	* Entregador tem tipo de carteira como VARCHAR(5), podendo ser CHAR(2) e estar em tabela domínio. O mesmo serve para TipoVeículo e ModeloVeiculo
+	* Senha como varchar em Entregador abre uma questão problemática em segurança, caso o dado fosse guardado sem criptografia seria um problema;
+	* Contrato tem Horario como VARCHAR(50), dependendo da regra de negócio, pode-se transformar em uma tabela domínio.
+	* Proprierário poderia ser melhor dividido com tabela para celular, nome em nome e sobrenome;
+	* Restaurante pode ter atributo de razão social;
+	* HorarioFuncionamento deve seguir o mesmo padrão corrigido de horario do contrato;
+	* Numero em Restaurante pode ser nulável;
+	* Cidade em Restaurante pode ser uma tabela domínio;
+	* ValorFrete deve ser variável com a região, possuindo diversos valores dependendo do destino;
+	* Um Item pode ter várias categorias também, como Poke pode ser 'havaiana' e 'saudável', ligação N:N

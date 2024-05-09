@@ -1,0 +1,3 @@
+14.	A concatenação desse relatório provavelmente acarretará pouco impacto no sistema, uma vez que é somente a inserção de campos novos e pouca interação com demais já existentes, porém não posso dizer com certeza devido à falta de informações para analises mais profundas (documentação, comentários e afins).
+
+	Como forma de simplificar o tamanho da proc, uma maneira é criar uma função de loop através do while com uma variável @dataAtras que comeca com 30 dias atrás com base no @dataComparacao que começa com @datageracao, faz-se a consulta e ao final regride-se 30 dias de ambas as variáveis e reprocessa até o final onde @dataComparacao seja 180.
