@@ -1,0 +1,7 @@
+1- Padronização de nome de tabelas: Cupom_Cliente e ContatoCliente, escolhe uma forma só
+2- Ligação Endereço -< UF, com a chave de Endereço em UF...É pra ser ao contrário. Endereço >- UF, com a pk de UF em Endereço como FK. UF só deve ter Id e Nome
+3- Ligação de um pra um entre Cliente e NotaFiscal, deveria ser um pra muitos. Um cliente pode ter mais de uma nota fiscal
+4- TipoStatus e Status não precisa ser duas tabelas, poderia ser uma só
+5- Usaria BIGINT nos campos  como Celular, Fixo e CPF
+6- Senha com VARCHAR(45) não é o ideal, um VARCHAR(255) ou VARCHAR(64) seriam melhores opções, por conta de criptografia para segurança
+7- AvaliaçãoEntrega como CHAR(12) não faz sentido. É muito caso seja uma avaliação numérica e pouco caso seja em texto
