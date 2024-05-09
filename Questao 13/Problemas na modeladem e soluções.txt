@@ -1,0 +1,36 @@
+1: Na modelagem atual, cada participante só existirá mediante um evento. O ideal seria uma tabela que relaciona Participante e Evento, com exclusividade. Além disso, a Inscrição não identifica o Participante, sendo assim impossível rastrear o pagamento de um Participante.
+É necessário ter uma tabela "Inscricao" com o Id do evento, id do participante, status de pagamento e hora.
+
+2: A modelagem anterior possuía o atributo de dataInscricao corretamente, entretanto, a disposição da tabela Inscricao com Evento e Participante não estava adequada para o relacionamento de uma Inscrição de um Participante em um evento.
+Tendo o atributo DataHoraInscricao na tabela de inscrição proposta na solução 1, é possível resolver o problema sem afetar operações de atualização e inserção, pois seria apenas recuperar dados de uma tabela mais condizente com o funcionamento esperado.
+
+3: Um relacionamento entre Evento e Palestra como eventos diferentes resolveria o problema, pois dessa forma é possível saber quantas palestras um evento possui e somar esse resultado com o número de eventos em que o participante esteve inscrito, considerando o ano da DataHoraInscricao igual ao ano anterior.
+
+4: Número de inscritos em um evento é um campo calculado, e armazenar campos calculados fere uma regra de normalização, o que apenas deve ser feito em situações críticas do sistema, como quando uma inscrição foi paga.
+
+5: Uma tabela InscricaoNaPalestra aborda casos em que o participante está em uma evento, mas em nenhuma palestra, em que o participante está em um evento e em quais palestras daquele evento, ou o participante foi relacionado a um evento automaticamente por meio de uma inscrição em uma palestra. A notificação poderia ser enviada ao palestrante a cada 24h e o número de participantes na palestra seria calculado com base nesta tabela InscricaoNaPalestra. Ao fim da palestra, deve ser apresentado um QR Code que quando escaneado irá gerar presença do participante na palestra ou um funcionário registrar o participante de forma manual. O participante que não possuir presença registrada 24h após o término na palestra terá o registro atualizado para 0 no campo Presente em InscricaoNaPalestra.
+
+6: A tabela domínio Status Pagamento compreende cancelar a inscrição de um evento. Todas as consultas que abordam uma inscrição deverão ter como critério inscrições ativas ou canceladas.
+	
+7: A regra pode contemplar que não seja possível realizar novas inscrições menos que 24h antes do evento, dessa forma, basta atualizar o StatusPagamento das inscrições ainda não pagas para aquele evento ou com a DataHoraPagamento nula 24h antes do mesmo
+
+8: Uso de índices não clusterizados sem UNIQUE, pois em um mesmo instante pode ser realizado mais de um pagamento. Isso fará com que consultas utilizando o momento dos pagamentos como critério de pesquisa sejam substancialmente mais rápidas.
+
+9: Tabela de Parcelas com valor da parcela, data e hora do pagamento, e data prevista para o pagamento. Após a soma do valor das parcelas se igualar ao Valor real + desconto da inscrição, atualizar automaticamente o IdStatusPagamento para um status de pago e o atributo DataHoraPagamento.
+
+10: Requisito compreende regra de negócio do funcionamento e é possível por meio da modelagem.
+
+11: Requisito compreende regra de negócio do funcionamento e é possível por meio da modelagem.
+
+12: Requisito compreende regra de negócio do funcionamento e é possível por meio da modelagem.
+
+13: Tabela de AvaliacaoPalestrante relacionando Palestrante e Participante. 
+
+14: Atributo mediaAvaliacao em Palestrante para lidar com sensibilizações na tabela AvaliacaoPalestrante
+
+15: Alterar o programa gerado no requisito 1, mas agora na tabela de InscricaoNaPalestra para saber se o Participante atende o critério para ter o certificado. Considerar apenas palestras que o participante esteve presente.
+
+16: Após uma semana do fim da palestra, disparar este email para os Participantes Presentes mas com avaliação nula.
+
+17: Somar o número de horas de todas as palestras em que a inscrição está dada como presente.
+

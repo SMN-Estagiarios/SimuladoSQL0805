@@ -1,0 +1,17 @@
+A adição das informações de liquidez para diferentes períodos de tempo nos últimos
+180 dias impacta a eficiência e o desempenho dos banco de dados devido à consulta
+em múltiplas tabelas e registros, calculando estes registros, aplicando condição de nulo,
+funções de agregação, condições de dias e várias CTE's aninhadas.
+
+Entretanto, a análise de impacto não irá atingir a estrutura do banco de dados de forma
+substancial, pois a problemática envolve uma consulta/operação que o banco realiza. 
+Como o problema incide apenas uma procedure que realiza uma CONSULTA com dados que o
+banco já possui, o impacto será apenas uma tabela para ter o histórico inserido
+de uma consulta que o sistema já executa.
+
+Uma abordagem é que os valores gerados pelo último relatório sejam armazenados
+e que as movimentações de um determinado dia sejam apenas calculados e somados com
+o relatório do dia anterior. Dessa forma o processamento será reduzido, pois não irá calcular
+por meio de 180 dias, e sim dia a dia. Assim, caso seja requerido os tipos de baixa nos
+últimos 180 dias, basta considerar os valores do relatório gerado 180 dias atrás ou
+um cálculo com base no balanço de 180 dias atrás e o balanço atual.

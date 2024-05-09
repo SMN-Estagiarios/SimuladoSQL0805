@@ -1,0 +1,13 @@
+1. A tabela CategoriaItem se trata de uma tabela domínio, entretanto, sua chave primária está como INT, uma melhor abordagem seria que o campo fosse TINYINT
+
+2. A tabela UF se trata de uma tabela que da forma como está modelada acarretará em uma Dependência Multivalorada, pois um estado com mais de um endereço terá que se repetir devido à chave estrangeira "Endereco_idEndereco". Ademais, esta tabela também possui a chave do Id do Cliente, entretanto, essa mesma informação já está presente na tabela de endereço, sendo redundante e trazendo risco à integridade referencial.
+Para a tabela estar modelada adequadamente para a proposta, o ideal seria que Uf fosse uma tabela domínio e que a tabela Endereco tivesse a chave estrangeira de UF, e a tabela UF possuir apenas Id TINYINT e nome, sem chave estrangeira do cliente.
+
+3. NotaFiscal possui Id do Cliente de forma 1:1, entretanto, o Id do Cliente já está disponível na tabela Pedido, tabela essa que NotaFiscal também se relaciona. 
+Uma melhor abordagem seria retirar a chave estrangeira do Cliente de NotaFiscal e ela estar presente apenas em Pedido.
+
+4. A tabela contrato não descreve adequadamente a relação entre entregador e restaurante. O ideal é que Contrato tenha um BLOB com o documento, afim de uma melhor auditoria. Apenas o campo de Descricao não garante isso.
+O atributo Horario como VARCHAR(50) não é transparente em relação a qual sua função/o que significa.
+
+5. A tabela Entrega possui Status como VARCHAR(20), entretanto, toda entrega poderá possuir os mesmos valores para status, situação que não é contemplada na modelagem atual.
+O ideal seria: uma tabela domínio StatusRastreio, que iria conter informações como "Em preparação", "Saiu para entrega", "Entregue", "Devolvido", entre outros, e uma tabela RastreioEntrega, com o IdStatusRastreio, IdEntrega e data e hora. Assim, uma mesma entrega teria vários registros do processo, com a data e hora de cada acontecimento.
