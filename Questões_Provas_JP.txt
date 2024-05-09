@@ -1,0 +1,27 @@
+12) - Cliente:
+            - Em ContatoCliente, o Whatsapp deveria ser CHAR(11) igual o Celular para uma padronização;
+            - Em Endereço, o Complemento deveria ser nulável, pois tem casas que não tem complemento;
+            - A ligação entre UF e Endereço deveria ser ao contrário, pois um estado pode 
+            ter muitos endereços e um endereço só pode estar dentro de um estado, a FK iria para o Endereço (Id_UF) e na tabela UF não teria nenhuma FK;
+            - IdUF deveria ser INT, como é o padrão em todas as PKs;
+    
+    - Restaurante:
+        - Em Restaurante, o Complemento deveria ser nulável, pois tem endereços que não tem complemento;
+        - Alterar o Nome do Proprietario para Nome VARCHAR(45) e Sobrenome VARCHAR(45), pois é importante que ele siga o mesmo padrão do Cliente;
+    
+    - Motoboy:
+        - Em Contrato, o DataFim deveria ser nulável, pois dependendo da regra de negócio é possivel fazer um contrato sem previsão do fim dele;
+        - Em Entregador, colocar o Whatsapp como CHAR(11), para seguir o mesmo padrão do celular;
+        - A senha precisa ser VARCHAR(64), pois é o padrão de senhas criptografadas;
+    
+    - Pedido:
+        -  O mesmo Cupom pode estar inseridos em muitos Pedidos, então a ligação deveria ser um para muitos com a FK em Pedido
+        - A ligação de Nota Fiscal e Cliente não deveria existir, pois se a NotaFiscal já é ligada com o Pedido, já é possível saber qual o Cliente;
+        - Um pedido só pode ter uma entrega, a ligação entre Entrega e Pedido deveria ser um pra um;
+        - Se a regra de negócio diz que um Status só tem um TipoStatus, são é necessária a existencia de duas tabelas, ou o Status já vem com o  tipo dentro
+        da própria tabela Status como um atributo, ou a ligação mudaria de um para muitos, com um TipoStatus podendo ser inserido em muitos Status;
+
+13) Segue o anexo.
+
+14) Fazer uma nova tabela com os campos calculados que estão no primeiro select, pois ele teria que ir para só uma tabela ao invés de ter que ao executar a procedure
+e acessar vários registros em várias tabelas e fazer os calculos.
