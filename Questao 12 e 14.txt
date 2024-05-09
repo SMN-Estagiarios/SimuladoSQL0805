@@ -1,0 +1,10 @@
+12 - 
+    ContatoRestaurante E Restaurante não deve ter uma tabela associativa de muitos para muitos,      
+    Entidade UF recebendo FJ do cliente sem ter necessidade e sem ter ligação,
+    Entidade Contato Cliente recebendo tipo de dados errado para Whatsapp,
+    Entidade Nota Fiscal recebe a FK da Entidade Pedido que ja tem a FK do Cliente entao nao, precisa da ligação Nota Fiscal com o cliente,
+    Manut poderia ser feito uma desnormalização para as entidade chaves.
+
+14 -
+    Notei que esta sendo usado uma CTE, poderia usar um ou mais tabelas temporias para armazenar os dados especifico que será utilizado, 
+    para que nao fique o tempo tdo acessando o banco em si para ter que capturar tais informações.
