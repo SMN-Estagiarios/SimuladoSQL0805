@@ -1,3 +1,7 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_InserirCliente] 
 	@Nome VARCHAR(500),
 	@Email VARCHAR(500),
@@ -5,7 +9,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirCliente]
 	@Cpf BIGINT,
 	@Telefone BIGINT,
 	@DataNascimento DATE
-	AS 
+AS 
 	/*
 	Documentacao
 	Arquivo Fonte.....: Cliente.sql
@@ -60,12 +64,13 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirCliente]
 			ELSE
 				RETURN 1
 				
-		END
+		END;
+
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_ExcluirCliente]
 		@Id_Cliente INT
-		AS
+AS
         /*
 		Documentacao
 		Arquivo Fonte.....: Cliente.sql
@@ -114,20 +119,21 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ExcluirCliente]
 		BEGIN
 
 			UPDATE [dbo].[Cliente]  SET Ativo = 0
-				WHERE Id = @Id_Cliente			
+				WHERE Id = @Id_Cliente;			
 
 			IF @@ROWCOUNT <> 0
 				RETURN 0
 			ELSE
 				RETURN 1
-		END
+		END;
+
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarSenhaCliente]
 		@Id_Cliente INT,
 		@Senha VARCHAR(64) 
 		
-		AS
+AS
         /*
 		Documentacao
 		Arquivo Fonte.....: Cliente.sql
@@ -183,7 +189,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarSenhaCliente]
 			ELSE
 				RETURN 1
 
-		END
+		END;
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarTelefoneCliente]
@@ -246,5 +252,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarTelefoneCliente]
 			ELSE
 				RETURN 1
 
-		END
+		END;
 GO
