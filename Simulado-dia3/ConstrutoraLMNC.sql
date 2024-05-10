@@ -1,8 +1,8 @@
-CREATE DATABASE DB_ConstrutoraLMNC
+CREATE DATABASE DB_ConstrutoraLMNC 
 GO 
 
 USE DB_ConstrutoraLMNC
-GO 
+GO  
 
 CREATE TABLE Indice(
 	Id TINYINT, 
@@ -95,10 +95,12 @@ CREATE TABLE Compra(
 	Id INT IDENTITY,
 	Valor DECIMAL(10,2) NOT NULL,
 	DataCompra DATE NOT NULL,
-	Descricao VARCHAR(500) NOT NULL
-
+	Descricao VARCHAR(500) NOT NULL,
+	TotalParcela SMALLINT NOT NULL,
+	
 	CONSTRAINT PK_IdCompra PRIMARY KEY (Id)
 );
+ 
 
 CREATE TABLE Juros (
 	Id TINYINT IDENTITY,
@@ -142,7 +144,7 @@ CREATE TABLE Transferencia (
 
 CREATE TABLE TipoLancamento (
 	Id TINYINT,
-	Nome VARCHAR(20) NOT NULL
+	Nome VARCHAR(30) NOT NULL
 
 	CONSTRAINT PK_IdTipoLancamento PRIMARY KEY (Id)
 );
@@ -170,7 +172,7 @@ CREATE TABLE Parcela (
 	Id INT IDENTITY, 
 	IdVenda INT,
 	IdCompra INT,
-	IdJuros TINYINT NOT NULL,
+	IdJuros TINYINT,
 	IdLancamento INT,
 	Valor DECIMAL (10,2) NOT NULL,
 	DataVencimento DATE NOT NULL
@@ -204,7 +206,7 @@ INSERT INTO [dbo].[Juros](Aliquota, DataInicio)
 	
 INSERT INTO [dbo].[TipoDespesa](Id, Nome)
 	VALUES	(1, 'Folha de pagamento'),
-			(2, 'Contas')
+			(2, 'Contas')  
 
 INSERT INTO [dbo].[Despesa](IdTipo, Valor, Descricao, DataVencimento)
 	VALUES	(1, 120000, 'Folha de pagamento referente ao mês', @DataInicio),
@@ -212,9 +214,10 @@ INSERT INTO [dbo].[Despesa](IdTipo, Valor, Descricao, DataVencimento)
 
 INSERT INTO [dbo].[TipoLancamento](Id, Nome)
 	VALUES	(1, 'Transferência'),
-			(2, 'Pagamento de parcela'),
-			(3, 'Compra'),
-			(4, 'Despesa')
+			(2, 'Compra'),
+			(3, 'Despesa'),
+			(4, 'Pagamento de parcela'),
+			(5, 'Recebimento de parcela')  
 		
 SET IDENTITY_INSERT [dbo].[Cliente] ON
 INSERT INTO [dbo].[Cliente](Id, Nome, Email, Senha, CPF, Telefone, DataNascimento, Ativo)
@@ -247,15 +250,15 @@ INSERT INTO [dbo].[Conta](IdCliente, ValorSaldoInicial, ValorCredito, ValorDebit
 			(3, 3000.00, 500.00, 300.00, '2024-05-10', '2024-03-15', NULL, 1);
 
 -- Inserir compras
-INSERT INTO [dbo].[Compra](Valor, DataCompra, Descricao)
-	VALUES	(5000.00, '2024-05-05', 'Material de construção'),
-			(3000.00, '2024-04-28', 'Mobília para apartamento');
+INSERT INTO [dbo].[Compra](Valor, DataCompra, Descricao, TotalParcela)
+	VALUES	(5000.00, '2024-05-05', 'Material de construção', 1),
+			(3000.00, '2024-04-28', 'Mobília para apartamento', 1);
 
 -- Inserir lançamentos
 INSERT INTO [dbo].[Lancamento](IdConta, IdTipo, TipoOperacao, Valor, NomeHistorico, DataLancamento)
 	VALUES	(1, 1, 'D', 500.00, 'Transferência para investimento', '2024-05-08'),
 			(2, 4, 'D', 1000.00, 'Pagamento de contas de água e energia', '2024-05-07'),
-			(3, 2, 'C', 200.00, 'Pagamento de parcela do financiamento', '2024-05-10');
+			(3, 2, 'D', 200.00, 'Pagamento de parcela do financiamento', '2024-05-10');
 
 -- Inserir parcelas
 INSERT INTO [dbo].[Parcela](IdVenda, IdCompra, IdJuros, IdLancamento, Valor, DataVencimento)
