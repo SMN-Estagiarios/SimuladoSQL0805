@@ -55,10 +55,11 @@ AS
 		01.................: Sucesso																
 		*/
 		BEGIN
-				
+			
+			--Inserção de dados de novos clientes a partir dos parâmetros;
 			INSERT INTO [dbo].[Cliente] (Nome,Email,Senha,Cpf,Telefone,DataNascimento,Ativo) VALUES   				
 														(@Nome,@Email,@Senha,@Cpf,@Telefone,@DataNascimento,1);
-
+			
 			IF @@ROWCOUNT <> 0
 				RETURN 0
 			ELSE
