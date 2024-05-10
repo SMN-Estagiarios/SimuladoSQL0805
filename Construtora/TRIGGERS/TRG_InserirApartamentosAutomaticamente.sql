@@ -1,6 +1,3 @@
-USE DB_ConstrutoraLMNC;
-GO
-
 CREATE OR ALTER TRIGGER [dbo].[TRG_InserirApartamentosAutomaticamente]
 	ON [dbo].[Predio]
 	AFTER INSERT

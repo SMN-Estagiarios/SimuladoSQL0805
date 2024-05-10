@@ -1,7 +1,7 @@
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarFluxoDeCaixa]
 	@DataInicio DATE = NULL,
 	@DataTermino DATE = NULL
-AS
+	AS
 	/*
 		Documentação
 		Arquivo Fonte.....: Conta.sql
@@ -12,11 +12,11 @@ AS
 								DBCC DROPCLEANBUFFERS;
 								DBCC FREEPROCCACHE;
 
-								DECLARE @RET INT, 
-								@Dat_init DATETIME = GETDATE()
+								DECLARE @DATA_INI DATETIME = GETDATE();
 
-								EXEC @RET = [dbo].[SP_ListarFluxoDeCaixa]NULL, NULL
-							
+								EXEC [dbo].[SP_ListarFluxoDeCaixa]NULL, NULL
+
+								SELECT	DATEDIFF(MILLISECOND, @DATA_INI, GETDATE()) AS TempoExecucao;
 							ROLLBACK TRAN
 
 	*/
@@ -84,5 +84,4 @@ AS
 											     ) x		
 		-- Excluindo tabela temporária
 		DROP TABLE #TabelaData
-END		
-	
+END
