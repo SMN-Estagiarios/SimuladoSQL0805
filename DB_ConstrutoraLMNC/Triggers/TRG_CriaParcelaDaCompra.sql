@@ -1,10 +1,10 @@
-CREATE OR ALTER TRIGGER [dbo].[TRG_CriaParcelaDaCompra]
+CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 	ON [dbo].[Compra]
 	FOR INSERT
 	AS
 	/*
 	DOCUMENTACAO
-		Arquivo Fonte....:	TRG_CriaParcelaDaCompra.sql
+		Arquivo Fonte....:	TRG_CriarParcelaDaCompra.sql
 		Objetivo............:	Cria parcela ou parcelas da compra realizada.
 		Autor................:	OrcinoNeto
 		Data.................:	10/05/2024
