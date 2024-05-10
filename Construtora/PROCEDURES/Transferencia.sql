@@ -8,63 +8,30 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 		Documentação
 		Arquivo Fonte.....: Transferencia.sql
 		Objetivo..........: Instanciar uma nova trasnferência entre contas
-		Autor.............: Adriel Alexander
+		Autor.............: Danyel Targino
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
 								DBCC FREEPROCCACHE;
 
-								DECLARE @RET INT, 
-								@Dat_init DATETIME = GETDATE()
+								DECLARE	@RET INT,
+										@DataInicio DATETIME = GETDATE()
 
-
-								SELECT ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
-									FROM [dbo].[Conta] WITH(NOLOCK)
+								SELECT * FROM [dbo].[Conta] WITH(NOLOCK)
 	
-								SELECT TOP 20 Id,
-												IdConta,
-												IdTipo,
-												IdTransferencia,
-												Valor,
-												TipoOperacao,
-												DataLancamento,
-												NomeHistorico
-										FROM [dbo].[Lancamento]
-										ORDER BY DataLancamento DESC
+								SELECT TOP 20 * FROM [dbo].[Lancamento] WITH(NOLOCK)
+												ORDER BY DataLancamento DESC
 
 								EXEC @RET = [dbo].[SP_RealizarTransferencia] 1, 2, 2000, 'Teste'
 
-								SELECT @RET AS RETORNO,
-										DATEDIFF(millisecond, @Dat_init, GETDATE()) AS EXECUcaO
+								SELECT	@RET AS Retorno,
+										DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
 								
-								SELECT  ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
-									FROM [dbo].[Conta] WITH(NOLOCK)
+								SELECT * FROM [dbo].[Conta] WITH(NOLOCK)
 
-								SELECT TOP 20 Id,
-											IdConta,
-											IdTipo,
-											IdTransferencia,
-											Valor,
-											TipoOperacao,
-											DataLancamento,
-											NomeHistorico
-									FROM [dbo].[Lancamento]
-									ORDER BY DataLancamento DESC
+								SELECT TOP 20 * FROM [dbo].[Lancamento] WITH(NOLOCK)
+												ORDER BY DataLancamento DESC
 
-
-								
 							ROLLBACK TRAN
 
 		Retornos........: 0 - Sucesso  
@@ -75,18 +42,21 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 	*/
 	BEGIN
 		--declaração de Variáveis
-		DECLARE @Data_Atual DATE = GETDATE()
+		DECLARE @Data_Atual DATETIME = GETDATE()
+		
 		--Verifica se as contas Existem
-		IF NOT EXISTS (SELECT TOP 1 1
+		IF NOT EXISTS	(
+							SELECT TOP 1 1
 								FROM [dbo].[Conta] WITH(NOLOCK)
 								WHERE Id  = @IdContaCredito
-									OR Id = @IdContaDebito)
+									OR Id = @IdContaDebito
+						)
 			BEGIN
 				RETURN 1
 			END
 
 		--Verifica se o valor da transferencia é inferior ao valor de saldo
-		IF(@VlrTransf > (SELECT [dbo].[FNC_CalcularSaldoAtualConta](@IdContaDebito, ValorSaldoInicial, ValorCredito,ValorDebito)
+		IF(@VlrTransf > (SELECT [dbo].[FNC_CalcularSaldoAtual](@IdContaDebito, ValorSaldoInicial, ValorCredito,ValorDebito)
 										FROM [dbo].[Conta] c WITH (NOLOCK)
 										WHERE c.Id = @IdContaDebito )) 
 			BEGIN
@@ -98,6 +68,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 			BEGIN 
 				RETURN 3
 			END
+		
 		--Gerar Inserts em transferência
 		ELSE
 			BEGIN

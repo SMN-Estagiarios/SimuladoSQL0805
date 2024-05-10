@@ -14,24 +14,11 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 
 									DECLARE @DATA_INI DATETIME = GETDATE();
 
-									SELECT ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
-									FROM [dbo].[Conta] WITH(NOLOCK)
+									SELECT *
+										FROM [dbo].[Conta] WITH(NOLOCK)
 	
-								   SELECT TOP 20 Id,
-												 IdConta,
-												 IdTipo,
-												 IdTransferencia,
-												 Valor,
-												 TipoOperacao,
-												 DataLancamento,
-												 NomeHistorico
-										FROM [dbo].[Lancamento]
+								   SELECT TOP 20 *
+										FROM [dbo].[Lancamento] WITH(NOLOCK)
 										ORDER BY DataLancamento DESC
 
 									INSERT INTO Lancamento(	
@@ -53,24 +40,11 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 
 									SELECT DATEDIFF(MILLISECOND, @DATA_INI,GETDATE()) AS TempoExecução
 
-									SELECT ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
-									FROM [dbo].[Conta] WITH(NOLOCK)
+									SELECT *
+										FROM [dbo].[Conta] WITH(NOLOCK)
 	
-								   SELECT TOP 20 Id,
-												 IdConta,
-												 IdTipo,
-												 IdTransferencia,
-												 Valor,
-												 TipoOperacao,
-												 DataLancamento,
-												 NomeHistorico
-										FROM [dbo].[Lancamento]
+								   SELECT TOP 20 *
+										FROM [dbo].[Lancamento] WITH(NOLOCK)
 										ORDER BY DataLancamento DESC
 								ROLLBACK TRAN
 	*/
