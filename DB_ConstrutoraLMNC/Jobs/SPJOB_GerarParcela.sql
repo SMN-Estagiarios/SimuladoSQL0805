@@ -2,11 +2,11 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 	AS
 	/*
 		Documentação
-		Arquivo Fonte.........:	SPJOB_GerarParcela.sql
-		Objetivo..............:	Job diário para gerar uma parcela quando o dia da venda for igual ao dia do job e ainda houver parcelas em aberto
+		Arquivo Fonte.....:	SPJOB_GerarParcela.sql
+		Objetivo.............:	Job diário para gerar uma parcela quando o dia da venda for igual ao dia do job e ainda houver parcelas em aberto
 		Autor.................:	Todos
 		Data..................:	10/05/2024
-		Ex....................:	
+		Ex.....................:	
 									BEGIN TRAN
 										DBCC FREEPROCCACHE
 										DBCC DROPCLEANBUFFERS
@@ -27,7 +27,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 
 										SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
 									ROLLBACK TRAN
-		Retornos..............: 0 - Sucesso			
+		Retornos..............: 
+			0 - Sucesso			
 	*/
 	BEGIN
 		
