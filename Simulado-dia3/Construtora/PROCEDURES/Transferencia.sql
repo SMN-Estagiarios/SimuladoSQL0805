@@ -17,54 +17,24 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 								DECLARE @RET INT, 
 								@Dat_init DATETIME = GETDATE()
 
-
-								SELECT ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
+								SELECT *
 									FROM [dbo].[Conta] WITH(NOLOCK)
 	
-								SELECT TOP 20 Id,
-												IdConta,
-												IdTipo,
-												IdTransferencia,
-												Valor,
-												TipoOperacao,
-												DataLancamento,
-												NomeHistorico
-										FROM [dbo].[Lancamento]
+								SELECT TOP 20 *
+										FROM [dbo].[Lancamento] WITH(NOLOCK)
 										ORDER BY DataLancamento DESC
 
 								EXEC @RET = [dbo].[SP_RealizarTransferencia] 1, 2, 2000, 'Teste'
 
-								SELECT @RET AS RETORNO,
-										DATEDIFF(millisecond, @Dat_init, GETDATE()) AS EXECUcaO
+								SELECT	@RET AS Retorno,
+										DATEDIFF(millisecond, @Dat_init, GETDATE()) AS TempoExecucao
 								
-								SELECT  ValorSaldoInicial,
-										ValorCredito,
-										ValorDebito,
-										DataSaldo,
-										DataAbertura,
-										DataEncerramento,
-										Ativo
+								SELECT  *
 									FROM [dbo].[Conta] WITH(NOLOCK)
 
-								SELECT TOP 20 Id,
-											IdConta,
-											IdTipo,
-											IdTransferencia,
-											Valor,
-											TipoOperacao,
-											DataLancamento,
-											NomeHistorico
-									FROM [dbo].[Lancamento]
+								SELECT TOP 20 *
+									FROM [dbo].[Lancamento] WITH(NOLOCK)
 									ORDER BY DataLancamento DESC
-
-
-								
 							ROLLBACK TRAN
 
 		Retornos........: 0 - Sucesso  
@@ -77,10 +47,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 		--declaração de Variáveis
 		DECLARE @Data_Atual DATE = GETDATE()
 		--Verifica se as contas Existem
-		IF NOT EXISTS (SELECT TOP 1 1
+		IF NOT EXISTS	(
+							SELECT TOP 1 1
 								FROM [dbo].[Conta] WITH(NOLOCK)
 								WHERE Id  = @IdContaCredito
-									OR Id = @IdContaDebito)
+									OR Id = @IdContaDebito
+						)
 			BEGIN
 				RETURN 1
 			END

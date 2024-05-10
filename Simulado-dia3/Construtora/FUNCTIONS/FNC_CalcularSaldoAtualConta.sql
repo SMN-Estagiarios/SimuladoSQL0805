@@ -1,9 +1,9 @@
-CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta](
-														 @IdConta INT = NULL, 
-														 @ValorSldInicial DECIMAL(10,2) = NULL, 
-														 @ValorCredito DECIMAL(10,2) = NULL, 
-														 @ValorDebito DECIMAL(10,2) = NULL
-														)
+CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta]	(
+																	@IdConta INT = NULL, 
+																	@ValorSldInicial DECIMAL(10,2) = NULL, 
+																	@ValorCredito DECIMAL(10,2) = NULL, 
+																	@ValorDebito DECIMAL(10,2) = NULL
+																)
 	 RETURNS  DECIMAL(10,2)
 	 AS 
 	 /*
@@ -12,12 +12,11 @@ CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta](
 		Objetivo..........: Listar o saldo atual de todas as contas ou uma conta especifica na tabela Conta
 		Autor.............: Adriel Alexsander 
  		Data..............: 10/05/2024
-		Ex................: 
-							DBCC DROPCLEANBUFFERS;
+		Ex................: DBCC DROPCLEANBUFFERS;
 							DBCC FREEPROCCACHE;
 								
 							DECLARE @Dat_ini DATETIME = GETDATE()
-							SELECT	[dbo].[FNC_CalcularSaldoAtual](NULL,200,500,100) AS Resultado,
+							SELECT	[dbo].[FNC_CalcularSaldoAtualConta](NULL,200,500,100) AS Resultado,
 									DATEDIFF(millisecond, @Dat_ini, GETDATE()) AS Tempo_Execucao	
 	*/
 	BEGIN
