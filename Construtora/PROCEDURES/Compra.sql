@@ -5,14 +5,13 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 	@Parcelas SMALLINT	
 	AS
 	/*
-	Documentação
-	Arquivo Fonte..: Compra.sql
-	Objetivo..........: Fazer lançamento na entidade [dbo].[Compra] e sensibilizar a entidade parcela.
-							A variacel @DataVencimento é a data de vencimento da compra.
-	Autor..............: Orcino Neto
-	Data...............: 10/05/2024
-	EX..................:
-							BEGIN TRAN
+		Documentação
+		Arquivo Fonte.....: Compra.sql
+		Objetivo..........: Fazer lançamento na entidade [dbo].[Compra] e sensibilizar a entidade parcela.
+								A variacel @DataVencimento é a data de vencimento da compra.
+		Autor.............: Orcino Neto
+		Data..............: 10/05/2024
+		EX................:	BEGIN TRAN
 								DBCC DROPCLEANBUFFERS; 
 								DBCC FREEPROCCACHE;
 	
@@ -54,12 +53,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 								SELECT @RET AS RETORNO,
 											DATEDIFF(millisecond, @Dat_init, GETDATE()) AS TempoExecucao
 							ROLLBACK TRAN
-	Lista de Retornos:
-				0 - Sucesso.
-				1 - Erro ao realizar compra.
+
+							Lista de Retornos:
+										0 - Sucesso.
+										1 - Erro ao realizar compra.
 	*/		
 	BEGIN
-
 		--Inserir dados na entidade Compra.
 		INSERT INTO [dbo].[Compra](Valor,DataCompra,Descricao,TotalParcela)
 			VALUES(@Valor,@DataCompra,@Descricao,@Parcelas)

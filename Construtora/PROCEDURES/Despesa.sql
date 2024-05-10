@@ -1,4 +1,4 @@
-CREATE OR ALTER PROCEDURE [dbo].[SP_InsereDespesa]	@IdTipo TINYINT,
+CREATE OR ALTER PROCEDURE [dbo].[SP_InserirDespesa]	@IdTipo TINYINT,
 													@Descricao VARCHAR(200),
 													@Valor DECIMAL(10,2),
 													@DataVencimento DATE
@@ -6,36 +6,35 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InsereDespesa]	@IdTipo TINYINT,
 	AS
 	/*
 		Documentacao
-		Arquivo Fonte.....: despesa.sql
+		Arquivo Fonte.....: Despesa.sql
 		Objetivo..........: Inserir registro em despesa
 		Autor.............: Todos
  		Data..............: 10/04/2024
 		Ex................: BEGIN TRAN
 
-							SELECT	Id,
-									IdTipo,
-									Descricao,
-									Valor,
-									DataVencimento
-								FROM [dbo].[Despesa] WITH(NOLOCK)
+								SELECT	Id,
+										IdTipo,
+										Descricao,
+										Valor,
+										DataVencimento
+									FROM [dbo].[Despesa] WITH(NOLOCK)
 
-							DBCC DROPCLEANBUFFERS
-							DBCC FREEPROCCACHE
+								DBCC DROPCLEANBUFFERS
+								DBCC FREEPROCCACHE
 
-							DECLARE	@Ret INT,
-									@DataInicio DATETIME = GETDATE()
+								DECLARE	@Ret INT,
+										@DataInicio DATETIME = GETDATE()
 
-							EXEC @Ret = [dbo].[SP_InsereDespesa] 1, 'coisa', -19900.00, '01-20-2024'
-							SELECT @Ret AS Retorno, DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS Tempo
+								EXEC @Ret = [dbo].[SP_InsereDespesa] 1, 'coisa', -19900.00, '01-20-2024'
+								SELECT @Ret AS Retorno, DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS Tempo
 
-							SELECT	Id,
-									IdTipo,
-									Descricao,
-									Valor,
-									DataVencimento
-								FROM [dbo].[Despesa] WITH(NOLOCK)
-								WHERE Id = IDENT_CURRENT('Despesa')
-
+								SELECT	Id,
+										IdTipo,
+										Descricao,
+										Valor,
+										DataVencimento
+									FROM [dbo].[Despesa] WITH(NOLOCK)
+									WHERE Id = IDENT_CURRENT('Despesa')
 							ROLLBACK TRAN
 
 		RETORNOS: ........: 0 - SUCESSO
@@ -53,7 +52,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InsereDespesa]	@IdTipo TINYINT,
 	END
 GO
 
-CREATE OR ALTER PROCEDURE [dbo].[SP_ListaDespesas]	@DataInicio DATE,
+CREATE OR ALTER PROCEDURE [dbo].[SP_ListarDespesas]	@DataInicio DATE,
 													@DataComparacao DATE
 
 	AS
