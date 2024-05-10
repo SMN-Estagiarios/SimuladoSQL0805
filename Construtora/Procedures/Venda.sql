@@ -145,3 +145,37 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarVendas]
 			WHERE IdCliente = ISNULL(@IdCliente, IdCliente)
 	END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_ListarAptNaoVendidos]
+	AS
+	/*
+		Documentação
+		Arquivo Fonte.........:	Venda.sql
+		Objetivo..............:	Procedure para listar os apartamentos ainda não vendidos
+		Autor.................:	João Victor Maia
+		Data..................:	10/05/2024
+		Ex....................:		DBCC FREEPROCCACHE
+									DBCC DROPCLEANBUFFERS
+
+									DECLARE @Ret INT,
+											@DataInicio DATETIME = GETDATE()
+
+									EXEC @Ret = [dbo].[SP_ListarAptNaoVendidos]
+									
+									SELECT	@Ret AS Retorno,
+											DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+		Retornos..............: 0 - Sucesso
+	*/
+	BEGIN
+
+		--Listar apartamentos não vendidos
+		SELECT	a.Id,
+				a.IdPredio,
+				a.Numero,
+				a.Pavimento
+			FROM [dbo].[Apartamento] a WITH(NOLOCK)
+				LEFT JOIN [dbo].[Venda] v WITH(NOLOCK)
+					ON a.Id = v.IdApartamento
+					WHERE v.IdApartamento IS NULL
+	END
+GO
