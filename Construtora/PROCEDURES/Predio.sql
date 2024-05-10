@@ -1,6 +1,3 @@
-USE DB_ConstrutoraLMNC;
-GO
-
 CREATE OR ALTER PROCEDURE [dbo].[SP_InserirPredio]
 	@Nome VARCHAR(40),
 	@CEP CHAR(8),
@@ -13,34 +10,33 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirPredio]
 	@AptosPorAndar TINYINT
 	AS
 	/*
-	Documentacao
-	Arquivo fonte...:	Predio.sql
-	Objetivo........:	Cria registro de predio e ao mesmo tempo cria todos os apartamentos
-	Autor...........:	Grupo Estagiarios
-	Data............:	10/05/2024
-	Exemplo.........:	BEGIN TRANSACTION
-							DBCC DROPCLEANBUFFERS;
-							DBCC FREEPROCCACHE;
+		Documentacao
+		Arquivo fonte...:	Predio.sql
+		Objetivo........:	Cria registro de predio e ao mesmo tempo cria todos os apartamentos
+		Autor...........:	Grupo Estagiarios
+		Data............:	10/05/2024
+		Exemplo.........:	BEGIN TRANSACTION
+								DBCC DROPCLEANBUFFERS;
+								DBCC FREEPROCCACHE;
 
-							DECLARE @RET INT,
-									@Dat_ini DATETIME = GETDATE()
+								DECLARE @RET INT,
+										@Dat_ini DATETIME = GETDATE()
 
-							SELECT * FROM Predio
-							SELECT * FROM Apartamento
+								SELECT * FROM Predio
+								SELECT * FROM Apartamento
 
-							EXEC @RET = [dbo].[SP_InserirPredio] 'SoBalanca', '58025147', 'PB', 'Jampa', 'Cuia', 'Rua das Flores', '420', 3, 3
+								EXEC @RET = [dbo].[SP_InserirPredio] 'SoBalanca', '58025147', 'PB', 'Jampa', 'Cuia', 'Rua das Flores', '420', 3, 3
 
-							SELECT * FROM Apartamento
-							SELECT * FROM Predio
+								SELECT * FROM Apartamento
+								SELECT * FROM Predio
 
-							SELECT	@RET AS RETORNO,
-									DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
-						ROLLBACK TRANSACTION
+								SELECT	@RET AS RETORNO,
+										DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
+							ROLLBACK TRANSACTION
 
-	RETORNO.........:	0 - Sucesso
-						1 - ERRO - Falha ao criar registro de predio
-						2 - ERRO - Falha ao criar registro de apartamento
-
+							RETORNO.........:	0 - Sucesso
+												1 - ERRO - Falha ao criar registro de predio
+												2 - ERRO - Falha ao criar registro de apartamento
 	*/
 	BEGIN
 		-- Declaro as variaveis necessárias
@@ -88,31 +84,30 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_EntregarPredio]
 	@IdPredio INT
 	AS
 	/*
-	Documentacao
-	Arquivo fonte...:	Predio.sql
-	Objetivo........:	Atualiza atributo 'Entregue' do predio para TRUE
-	Autor...........:	Grupo Estagiarios
-	Data............:	10/05/2024
-	Exemplo.........:	BEGIN TRANSACTION
-							DBCC DROPCLEANBUFFERS;
-							DBCC FREEPROCCACHE;
+		Documentacao
+		Arquivo fonte...:	Predio.sql
+		Objetivo........:	Atualiza atributo 'Entregue' do predio para TRUE
+		Autor...........:	Grupo Estagiarios
+		Data............:	10/05/2024
+		Exemplo.........:	BEGIN TRANSACTION
+								DBCC DROPCLEANBUFFERS;
+								DBCC FREEPROCCACHE;
 
-							DECLARE @RET INT,
-									@Dat_ini DATETIME = GETDATE()
+								DECLARE @RET INT,
+										@Dat_ini DATETIME = GETDATE()
 
-							SELECT * FROM Predio
+								SELECT * FROM Predio
 
-							EXEC @RET = [dbo].[SP_EntregarPredio] 12
+								EXEC @RET = [dbo].[SP_EntregarPredio] 5
 
-							SELECT * FROM Predio
+								SELECT * FROM Predio
 
-							SELECT	@RET AS RETORNO,
-									DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
-						ROLLBACK TRANSACTION
+								SELECT	@RET AS RETORNO,
+										DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
+							ROLLBACK TRANSACTION
 
-	RETORNO.........:	0 - Sucesso
-						1 - ERRO - Predio nao existe em nossos registros
-
+							RETORNO.........:	0 - Sucesso
+												1 - ERRO - Predio nao existe em nossos registros
 	*/
 	BEGIN
 		-- Verificacao se o predio passado por parametro existe no banco de dados
@@ -135,19 +130,19 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarPredio]
 	@IdPredio INT = NULL
 	AS
 	/*
-	Documentacao
-	Arquivo fonte...:	Predio.sql
-	Objetivo........:	Atualiza atributo 'Entregue' do predio para TRUE
-	Autor...........:	Grupo Estagiarios
-	Data............:	10/05/2024
-	Ex..............:	DBCC DROPCLEANBUFFERS;
-						DBCC FREEPROCCACHE;
+		Documentacao
+		Arquivo fonte...:	Predio.sql
+		Objetivo........:	Atualiza atributo 'Entregue' do predio para TRUE
+		Autor...........:	Grupo Estagiarios
+		Data............:	10/05/2024
+		Ex..............:	DBCC DROPCLEANBUFFERS;
+							DBCC FREEPROCCACHE;
 
-						DECLARE @Dat_ini DATETIME = GETDATE()
+							DECLARE @Dat_ini DATETIME = GETDATE()
 
-						EXEC [dbo].[SP_ListarPredio]
+							EXEC [dbo].[SP_ListarPredio]
 
-						SELECT	DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
+							SELECT	DATEDIFF(MILLISECOND, @Dat_ini, GETDATE()) AS TempoExecucao
 	*/
 	BEGIN
 		-- Listar predio(s)
