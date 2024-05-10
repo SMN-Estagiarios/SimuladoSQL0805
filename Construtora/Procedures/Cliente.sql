@@ -59,6 +59,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirCliente]
 			BEGIN
 				RETURN 2
 			END
+
 		--Checar se o telefone já existe
 		IF EXISTS (SELECT TOP 1 1
 					FROM [dbo].[Cliente]

@@ -12,6 +12,17 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 
 									DECLARE @DataInicio DATETIME = GETDATE()
 
+									SELECT	IdVenda,
+											IdCompra,
+											IdJuros,
+											IdLancamento,
+											Valor,
+											DataVencimento
+										FROM [dbo].[Parcela] WITH(NOLOCK)
+										WHERE DATEPART(MONTH, DataVencimento) = DATEPART(MONTH, DATEADD(MONTH, 1, @DataInicio))
+										ORDER BY IdVenda
+
+
 									EXEC [dbo].[SPJOB_GerarParcela]
 
 									SELECT	IdVenda,
@@ -45,7 +56,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 					MAX(DataVencimento)
 				FROM [dbo].[Parcela]
 				GROUP BY IdVenda
-	select * from #UltimasParcelas
+
 		--Inserir parcelas de vendas em aberto
 		INSERT INTO [dbo].[Parcela](IdVenda, IdJuros, Valor, DataVencimento)
 							SELECT	v.Id,

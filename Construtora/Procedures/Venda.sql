@@ -110,3 +110,38 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 		RETURN 0
 	END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_ListarVendas]
+	@IdCliente INT = NULL
+	AS
+	/*
+		Documentação
+		Arquivo Fonte.........:	Venda.sql
+		Objetivo..............:	Procedure para listar todas as vendas gerais ou de um cliente específico
+		Autor.................:	João Victor Maia
+		Data..................:	10/05/2024
+		Ex....................:		DBCC FREEPROCCACHE
+									DBCC DROPCLEANBUFFERS
+
+									DECLARE @Ret INT,
+											@DataInicio DATETIME = GETDATE()
+
+									EXEC @Ret = [dbo].[SP_ListarVendas]
+									
+									SELECT	@Ret AS Retorno,
+											DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+		Retornos..............: 0 - Sucesso
+	*/
+	BEGIN
+		--Listar as vendas
+		SELECT	IdCliente,
+				IdApartamento,
+				IdIndice,
+				Valor,
+				DataVenda,
+				Financiado,
+				TotalParcela
+			FROM [dbo].[Venda] WITH(NOLOCK)
+			WHERE IdCliente = ISNULL(@IdCliente, IdCliente)
+	END
+GO
