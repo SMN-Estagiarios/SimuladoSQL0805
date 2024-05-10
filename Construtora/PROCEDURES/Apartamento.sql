@@ -4,17 +4,18 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RelatorioApartamentoNaoVendido]
 	/*
 		Documentação
 		Arquivo fonte........: Apartamento.sql
-		Objetivo.............: Listar todos os os apartamentos não vendidos
+		Objetivo.............: Listar todos os apartamentos não vendidos
 		Autor................: Gustavo Targino
 		Data.................: 10/05/2024
 		Ex...................: BEGIN TRAN
-									
+									DBCC DROPCLEANBUFFERS;
+									DBCC FREEPROCCACHE;
+
 									DECLARE @DataInicio DATETIME = GETDATE()
 
 									EXEC [dbo].[SP_RelatorioApartamentoNaoVendido]7
 									
 									SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) Tempo
-
 							   ROLLBACK
 
 	*/
