@@ -7,7 +7,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 	/* 
 		Documentação
 		Arquivo Fonte.....: Transferencia.sql
-		Objetivo..........: Instancia uma nova trasnferência entre contas
+		Objetivo..........: Instanciar uma nova trasnferência entre contas
 		Autor.............: Adriel Alexander
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
