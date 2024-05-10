@@ -18,8 +18,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 									DECLARE @Ret INT,
 											@DataInicio DATETIME = GETDATE()
 
-									EXEC @Ret = [dbo].[SP_InserirVenda] 0, 1, 1500000, 60
-
+									EXEC @Ret = [dbo].[SP_InserirVenda] 0, 4, 1000000, 60
+									
 									SELECT	IdCliente,
 											IdApartamento,
 											IdIndice,
@@ -103,15 +103,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 									)
 							VALUES (@IdVenda, 
 									@IdJuros, 
-									(@Valor/ @TotalParcela + (CASE	WHEN @Financiado = 1 THEN(@Valor * (SELECT MAX(vi.Aliquota)
-																											FROM [dbo].[ValorIndice] vi WITH(NOLOCK)
-																											WHERE vi.IdIndice = @IdIndice
-																										)
-																							  )
-																	ELSE 0
-															  END
-															 )
-									),
+									[dbo].[FNC_CalcularValorParcela](@Valor, @Financiado, @TotalParcela, @IdIndice),
 									DATEADD(MONTH, 1, GETDATE())
 									)
 
