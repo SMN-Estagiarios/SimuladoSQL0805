@@ -39,8 +39,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirNovoCliente]
 						ROLLBACK TRAN
 
 	Retorno.........:	0 - Sucesso
-						1 - Erro ao inserir Cliente: Cliente j· se encontra cadastrado no Sistema
-						2 - Erro ao inserir Cliente: N„o foi possÌvel criar novo registro de cliente
+						1 - Erro ao inserir Cliente: Cliente j√° se encontra cadastrado no Sistema
+						2 - Erro ao inserir Cliente: N√£o foi poss√≠vel criar novo registro de cliente
 	*/
 	BEGIN
 		
@@ -105,12 +105,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_DesativarCliente]
 							ROLLBACK TRAN
 
 		Retorno.........:	0 - Sucesso
-							1 - Erro ao Desativar Cliente: Cliente j· se encontra cadastrado no Sistema
+							1 - Erro ao Desativar Cliente: Cliente j√° se encontra cadastrado no Sistema
 							2 - Erro ao Desativar Cliente: Falha no update de Cliente
 	*/
 	BEGIN
 		
-		-- VerificaÁ„o se existe registro do cliente
+		-- Verifica√ß√£o se existe registro do cliente
 		IF NOT EXISTS (SELECT TOP 1 1
 						FROM [dbo].[Cliente] WITH(NOLOCK)
 						WHERE Id = @IdCliente)
@@ -178,12 +178,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarRegistroCliente]
 							ROLLBACK TRAN
 
 		RETORNO.........:	0 - Sucesso
-							1 - Erro ao atualizar o Cliente- O cliente n„o existe
-							2 - ERRO - N„o foi possÌvel excluir o cliente
+							1 - Erro ao atualizar o Cliente- O cliente n√£o existe
+							2 - ERRO - N√£o foi poss√≠vel excluir o cliente
 	*/
 	BEGIN
 		
-		-- VerificaÁ„o se existe registro do cliente
+		-- Verifica√ß√£o se existe registro do cliente
 		IF NOT EXISTS (SELECT TOP 1 1
 						FROM [dbo].[Cliente] WITH(NOLOCK)
 						WHERE Id = @IdCliente)
@@ -191,7 +191,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_AtualizarRegistroCliente]
 				RETURN 1
 			END
 
-		-- Atualiza Parametros de Clientes que foram passados na execuÁ„o da procedure
+		-- Atualiza Parametros de Clientes que foram passados na execu√ß√£o da procedure
 		UPDATE [dbo].[Cliente]
 			SET Senha = ISNULL(@Senha, Senha),
 				Nome = ISNULL(@Nome, Nome),
