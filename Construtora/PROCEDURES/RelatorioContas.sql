@@ -29,18 +29,15 @@ AS
 
 		IF @DiasParaSeremProcessados <> NULL 
 			BEGIN
-			--setando a variável de data para processamento de acordo com o valor passado nos paramentros 
-				SET @DataProcessamento =DATEADD(DAY, -ABS(@DiasParaSeremProcessados), @DataAtual)
+			   --setando a variável de data para processamento de acordo com o valor passado nos paramentros 
+				SET @DataProcessamento = DATEADD(DAY, -ABS(@DiasParaSeremProcessados), @DataAtual)
 				
 					SELECT	la.IdConta,
 							la.Valor,
 							la.Valor,
 							la.NomeHistorico,
-							la.DataLancamento,
-							tl.Nome
+							la.DataLancamento
 						FROM [dbo].[Lancamento]la WITH(NOLOCK)
-							INNER JOIN [dbo].[TipoLancamento] tl
-								ON tl.Id = la.IdTipo
 						WHERE la.IdConta = ISNULL(@IdConta,IdConta)
 							  AND DataLancamento BETWEEN @DataProcessamento AND @DataAtual
 			END
@@ -58,7 +55,7 @@ AS
 						WHERE la.IdConta = ISNULL(@IdConta,IdConta)
 			END
 	END
-
+GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarContasAReceber]
 	@IdConta INT = NULL

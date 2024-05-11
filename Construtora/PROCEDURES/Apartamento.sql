@@ -50,3 +50,36 @@ CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
 					ON x.IdVenda = v.Id;
 	END
 GO
+
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_RelatorioAptoNaoVendidos]
+	AS
+	/*
+		Documentacao
+		Arquivo Fonte.....: Venda.sql
+		Objetivo..........: Listar todos os apartamentos com as informacoes de parcelas pagas, vencidas e vincendas
+		Autor.............: Adriel Alexander de Sousa
+		Data..............: 10/05/2024
+		Ex................:	DBCC FREEPROCCACHE
+							DBCC DROPCLEANBUFFERS
+							DBCC FREESYSTEMCACHE('ALL')
+
+							DECLARE @DATA_INI DATETIME = GETDATE();
+
+							EXEC [dbo].[SP_RelatorioAptoNaoVendidos]
+
+							SELECT DATEDIFF(MILLISECOND, @DATA_INI, GETDATE()) AS TempoExecucao;
+	*/
+	BEGIN
+		SELECT	p.Nome AS Predio,
+				CONCAT(p.Logradouro, ', ', p.Numero, ', ', p.Bairro) AS Endereco,
+				a.Pavimento AS PavimentoApto,
+				a.Numero AS NumeroApartamento
+			FROM [dbo].[Apartamento] a WITH(NOLOCK)
+				LEFT JOIN [dbo].[Venda] v 
+					ON v.IdApartamento = a.Id
+				INNER JOIN [dbo].[Predio] p
+					ON p.Id = a.IdPredio
+			WHERE v.IdApartamento IS NULL
+	END
+GO
