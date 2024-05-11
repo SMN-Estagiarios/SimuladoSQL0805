@@ -11,7 +11,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 	/* 
 		Documentação
 		Arquivo Fonte.....: Transferencia.sql
-		Objetivo..........: Instanciar uma nova trasnferência entre contas
+		Objetivo..........: Instanciar uma nova transferência entre contas
 		Autor.............: Pedro Avelino
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
@@ -44,7 +44,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 		Retornos........: 0 - Sucesso  
 						  1 - Erro ao Transferir: Uma das contas não existe 
 						  2 - Erro ao Transferir: O Valor da Transferência é maior do que o disponível em conta 
-						  3 - Erro ao Transferir: Impossivel fazer trasnferência para a mesma conta
+						  3 - Erro ao Transferir: Impossivel fazer transferência para a mesma conta
 
 	*/
 	BEGIN

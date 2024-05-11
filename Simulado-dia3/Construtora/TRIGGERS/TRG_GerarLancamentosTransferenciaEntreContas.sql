@@ -10,9 +10,9 @@ AS
 		/*
 		DOCUMENTAÇÃO
 		Arquivo Fonte........:	TRG_GerarLancamentosTransferenciaEntreContas.sql
-		Objetivo.............:	gera inserts na tabela de lancamentos mediante transferencias cadastradas 
+		Objetivo.............:	Gerar inserções na tabela 'Lancamento' mediante transferencias cadastradas 
 								travado código para idTipo para transferencias = 1 
-		Autor................:	Adriel Alexander
+		Autor................:	Pedro Avelino
 		Data.................:	10/05/2024
 		Ex...................:	BEGIN TRAN
 									DBCC DROPCLEANBUFFERS;
@@ -37,7 +37,7 @@ AS
 	
 		*/
 	BEGIN
-			--Declaracao de Variáveis 
+			--Declaracao de Variaveis 
 			DECLARE @IdTransferencia INT,
 					@IdContaCredito INT,
 					@IdContaDebito INT,
@@ -47,7 +47,7 @@ AS
 					@TipoLancamento INT = 1, --id_tipolancamento travado em transferencia 
 					@IdLancamentoInserido INT
 
-	   		-- atribui��o de valores para casos de Insert
+	   		-- atribuindo valores para casos de inserção de dados
 			SELECT  @IdTransferencia = Id,
 					@IdContaCredito = IdContaCredito,
 					@IdContaDebito = IdContaDebito, 
@@ -79,7 +79,7 @@ AS
 											@DataTransferencia, 
 											@NomeReferencia
 										)
-					--Verifica se houve erro ao inserir dados em Lancamentos 	
+					--Verifica se houve erro ao inserir dados em 'Lancamento'	
 					IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
 						BEGIN 
 							RAISERROR('Erro na inclusão do lancamento de Débito', 16,1)
