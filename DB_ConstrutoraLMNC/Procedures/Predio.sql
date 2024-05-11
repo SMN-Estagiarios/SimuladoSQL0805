@@ -116,9 +116,11 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_EntregarPredio]
 	*/
 	BEGIN
 		-- Verificacao se o predio passado por parametro existe no banco de dados
-		IF NOT EXISTS	(SELECT TOP 1 1
-							FROM [dbo].[Predio] WITH(NOLOCK)
-							WHERE Id = @IdPredio)
+		IF NOT EXISTS	(
+							SELECT TOP 1 1
+								FROM [dbo].[Predio] WITH(NOLOCK)
+								WHERE Id = @IdPredio
+						)
 			BEGIN
 				RETURN 1
 			END
@@ -152,16 +154,16 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarPredio]
 	BEGIN
 		-- Listar predio(s)
 		SELECT	Id,
-					Nome,
-					CEP,
-					UF,
-					Cidade,
-					Bairro,
-					Logradouro,
-					Numero,
-					TotalPavimento,
-					QuantidadeApartamentoPorPavimento,
-					Entregue
+				Nome,
+				CEP,
+				UF,
+				Cidade,
+				Bairro,
+				Logradouro,
+				Numero,
+				TotalPavimento,
+				QuantidadeApartamentoPorPavimento,
+				Entregue
 			FROM [dbo].[Predio] WITH(NOLOCK)
 			WHERE Id = COALESCE(@IdPredio, Id)
 	END

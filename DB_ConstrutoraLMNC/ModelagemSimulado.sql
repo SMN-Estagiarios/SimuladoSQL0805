@@ -15,7 +15,8 @@ CREATE TABLE ValorIndice (
 	Id SMALLINT IDENTITY,
 	IdIndice TINYINT NOT NULL,
 	Aliquota DECIMAL(4,3) NOT NULL,
-	DataInicio DATE NOT NULL,
+	DataInicio DATE NOT NULL
+
 	CONSTRAINT PK_IdValorIndice PRIMARY KEY (Id),
 	CONSTRAINT FK_IdIndice_ValorIndice FOREIGN KEY (IdIndice) REFERENCES Indice(Id)
 );
@@ -29,6 +30,7 @@ CREATE TABLE Cliente (
 	Telefone BIGINT NOT NULL,
 	DataNascimento DATE NOT NULL,
 	Ativo BIT NOT NULL
+
 	CONSTRAINT PK_Cliente PRIMARY KEY (Id)
 );
 
@@ -42,7 +44,9 @@ CREATE TABLE Predio (
 	Logradouro VARCHAR(80) NOT NULL,
 	Numero VARCHAR(4) NOT NULL,
 	TotalPavimento TINYINT NOT NULL,
-	Entregue BIT NOT NULL,
+	QuantidadeApartamentoPorPavimento TINYINT NOT NULL,
+	Entregue BIT NOT NULL
+
 	CONSTRAINT PK_IdPredio PRIMARY KEY (Id)
 );
 
@@ -51,6 +55,7 @@ CREATE TABLE Apartamento (
 	IdPredio SMALLINT NOT NULL,
 	Numero TINYINT NOT NULL,
 	Pavimento TINYINT NOT NULL
+
 	CONSTRAINT PK_IdApartamento PRIMARY KEY(Id),
 	CONSTRAINT FK_IdPredio_Apartamento FOREIGN KEY (IdPredio) REFERENCES Predio (Id)
 );
@@ -64,10 +69,10 @@ CREATE TABLE Conta(
 	DataSaldo DATE NOT NULL,
 	DataAbertura DATE NOT NULL,
 	DataEncerramento DATE, 
-	Ativo BIT NOT NULL,
+	Ativo BIT NOT NULL
+
 	CONSTRAINT PK_IdConta PRIMARY KEY(Id),
 	CONSTRAINT FK_IdCliente_Conta FOREIGN KEY(IdCliente) REFERENCES Cliente(Id)
-
 );
 
 CREATE TABLE Venda(
@@ -79,6 +84,7 @@ CREATE TABLE Venda(
 	DataVenda DATE NOT NULL,
 	Financiado BIT NOT NULL,
 	TotalParcela SMALLINT NOT NULL
+
 	CONSTRAINT PK_IdVenda PRIMARY KEY (Id),
 	CONSTRAINT FK_IdCliente_Venda FOREIGN KEY (IdCliente) REFERENCES Cliente(Id),
 	CONSTRAINT FK_IdApartamento_Venda FOREIGN KEY (IdApartamento) REFERENCES Apartamento(Id),
@@ -89,30 +95,36 @@ CREATE TABLE Compra(
 	Id INT IDENTITY,
 	Valor DECIMAL(10,2) NOT NULL,
 	DataCompra DATE NOT NULL,
-	Descricao VARCHAR(500) NOT NULL
+	Descricao VARCHAR(500) NOT NULL,
+	TotalParcela SMALLINT NOT NULL
+	
 	CONSTRAINT PK_IdCompra PRIMARY KEY (Id)
 );
 
 CREATE TABLE Juros (
 	Id TINYINT IDENTITY,
 	Aliquota DECIMAL(4,3) NOT NULL,
-	DataInicio DATE NOT NULL,
+	DataInicio DATE NOT NULL
+
 	CONSTRAINT PK_IdJuros PRIMARY KEY (Id)
 );
 
 CREATE TABLE TipoDespesa (
 	Id TINYINT,
 	Nome VARCHAR(40) NOT NULL
-	CONSTRAINT PK_IdTipoDespesa PRIMARY KEY (Id),
+
+	CONSTRAINT PK_IdTipoDespesa PRIMARY KEY (Id)
 );
 
 CREATE TABLE Despesa (
 	Id INT IDENTITY,
 	IdTipo TINYINT NOT NULL,
 	Descricao VARCHAR(200) NOT NULL,
+	Valor DECIMAL(10,2) NOT NULL,
 	DataVencimento DATE
+
 	CONSTRAINT PK_IdDespesa PRIMARY KEY (Id),
-	CONSTRAINT FK_IdTipo_Despesa FOREIGN KEY (IdTipo) REFERENCES TipoDespesa(Id),
+	CONSTRAINT FK_IdTipo_Despesa FOREIGN KEY (IdTipo) REFERENCES TipoDespesa(Id)
 );
 
 
@@ -122,7 +134,8 @@ CREATE TABLE Transferencia (
 	IdContaDebito INT NOT NULL, 
 	Valor DECIMAL (10,2) NOT NULL,
 	NomeHistorico VARCHAR (200) NOT NULL,
-	DataTransferencia DATETIME NOT NULL,
+	DataTransferencia DATETIME NOT NULL
+
 	CONSTRAINT PK_IdTransferencia PRIMARY KEY (Id),
 	CONSTRAINT FK_IdContaCredito_Transferencias FOREIGN KEY (IdContaCredito) REFERENCES Conta(Id),
 	CONSTRAINT FK_IdContaDebito_Transferencias FOREIGN KEY (IdContaDebito) REFERENCES Conta(Id)
@@ -130,8 +143,9 @@ CREATE TABLE Transferencia (
 
 CREATE TABLE TipoLancamento (
 	Id TINYINT,
-	Nome VARCHAR(20) NOT NULL
-	CONSTRAINT PK_IdTipoLancamento PRIMARY KEY (Id),
+	Nome VARCHAR(50) NOT NULL
+
+	CONSTRAINT PK_IdTipoLancamento PRIMARY KEY (Id)
 );
 
 CREATE TABLE Lancamento (
@@ -143,7 +157,8 @@ CREATE TABLE Lancamento (
 	TipoOperacao CHAR(1) NOT NULL,
 	Valor Decimal (10,2) NOT NULL,
 	NomeHistorico VARCHAR(200) NOT NULL,
-	DataLancamento DATETIME NOT NULL,
+	DataLancamento DATETIME NOT NULL
+
 	CONSTRAINT PK_IdLancamentos PRIMARY KEY(Id),
 	CONSTRAINT FK_IdConta_Lancamento FOREIGN KEY (IdConta) REFERENCES Conta(Id),
 	CONSTRAINT FK_IdTipo_Lancamento FOREIGN KEY (IdTipo) REFERENCES TipoLancamento(Id),
@@ -156,10 +171,11 @@ CREATE TABLE Parcela (
 	Id INT IDENTITY, 
 	IdVenda INT,
 	IdCompra INT,
-	IdJuros TINYINT NOT NULL,
+	IdJuros TINYINT,
 	IdLancamento INT,
 	Valor DECIMAL (10,2) NOT NULL,
-	DataVencimento DATE NOT NULL,
+	DataVencimento DATE NOT NULL
+
 	CONSTRAINT PK_IdParcela PRIMARY KEY (Id),
 	CONSTRAINT FK_IdVenda_Parcela FOREIGN KEY (IdVenda) REFERENCES Venda(Id),
 	CONSTRAINT FK_IdLancamento_Parcela FOREIGN KEY (IdLancamento) REFERENCES Lancamento(Id),

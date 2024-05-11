@@ -15,7 +15,7 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 
 										DECLARE	@Dat_init DATETIME = GETDATE(),
 														@RET INT
-
+														 
 										SELECT Id,
 													Valor,
 													DataCompra,
@@ -31,7 +31,7 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 													DataVencimento
 											FROM [dbo].[Parcela]
 
-										EXEC @RET = [dbo].[SP_GerarCompra] 1600,'2024-05-30', 'Galinha de Capoeira',0
+										EXEC @RET = [dbo].[SP_GerarCompra] 1600,'2024-05-30', 'Galinha de Capoeira',10
 
 										SELECT Id,
 													Valor,
@@ -56,16 +56,16 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 	*/
 	BEGIN
 		DECLARE	@IdCompra INT,
-						@Valor DECIMAL(10,2),
-						@DataCompra DATE,
-						@TotalParcela SMALLINT,
-						@Count INT = 1,
-						@ValorParcela DECIMAL(10,2)
+				@Valor DECIMAL(10,2),
+				@DataCompra DATE,
+				@TotalParcela SMALLINT,
+				@Count INT = 1,
+				@ValorParcela DECIMAL(10,2)
 
-		SELECT @IdCompra = Id,
-					@Valor = Valor,
-					@DataCompra = DataCompra,
-					@TotalParcela = TotalParcela
+		SELECT	@IdCompra = Id,
+				@Valor = Valor,
+				@DataCompra = DataCompra,
+				@TotalParcela = TotalParcela
 			FROM INSERTED
 
 		--Setando o valor da parcela.
@@ -90,8 +90,5 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 						SET @Count +=1
 					END
 			END
-
-		RAISERROR('Erro ao Inserir Parcela',16,1)
-
 	END
 GO
