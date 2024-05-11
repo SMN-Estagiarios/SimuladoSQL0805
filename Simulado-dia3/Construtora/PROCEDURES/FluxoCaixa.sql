@@ -7,10 +7,10 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarFluxoDeCaixa]
 	@DataTermino DATE = NULL
 AS
 	/*
-		Documentação
+		Documentaï¿½ï¿½o
 		Arquivo Fonte.....: FluxoCaixa.sql
-		Objetivo..........: Lista o fluxo de caixa diário da Construtora id da conta travado como 0 (Conta da construtora)
-		Autor.............: Grupo Estagiários SMN
+		Objetivo..........: Lista o fluxo de caixa diï¿½rio da Construtora id da conta travado como 0 (Conta da construtora)
+		Autor.............: Grupo Estagiï¿½rios SMN
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
@@ -26,26 +26,26 @@ AS
 	*/
 	 BEGIN
 
-		-- Variáveis de tempo
+		-- Variï¿½veis de tempo
 		DECLARE @DataAtual DATE = GETDATE(),
 				@MesPassado DATE;
 
-		-- Data do mês passado
+		-- Data do mï¿½s passado
 		SET @MesPassado = DATEADD(MONTH, -1, @DataAtual);
 
-		-- Se data início for nulo, usar o dia 1 do mês passado
+		-- Se data inï¿½cio for nulo, usar o dia 1 do mï¿½s passado
 		IF @DataInicio IS NULL	
 			BEGIN
 				SET @DataInicio = DATEFROMPARTS(YEAR(@MesPassado), MONTH(@MesPassado), 1);
 			END;
 
-		-- Se data término for nulo, usar a data da chamada da procedure
+		-- Se data termino for nulo, usar a data da chamada da procedure
 		IF @DataTermino IS NULL
 			BEGIN 
 				SET @DataTermino = @DataAtual	
 			END;
 
-		-- Tabela temporária com as datas do período
+		-- Tabela temporaria com as datas do perï¿½odo
 		CREATE TABLE #TabelaData (
 									Dia DATE
 								 ) 
@@ -86,6 +86,6 @@ AS
 															SUM(Valor_Credito - Valor_Debito) OVER (PARTITION BY IdConta ORDER BY Dia) AS SaldoFluxoAcumulativo
 														FROM CalculoCreditoDebito
 											     ) x;		
-		-- Excluindo tabela temporária
+		-- Excluindo tabela temporaria
 		DROP TABLE #TabelaData;
 END;
