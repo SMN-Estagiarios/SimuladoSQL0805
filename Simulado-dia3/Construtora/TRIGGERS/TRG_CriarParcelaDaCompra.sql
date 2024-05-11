@@ -1,7 +1,11 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 	ON [dbo].[Compra]
 	FOR INSERT
-	AS
+AS
 	/*
 	DOCUMENTACAO
 		Arquivo Fonte....:	TRG_CriarParcelaDaCompra.sql
@@ -82,7 +86,7 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_CriarParcelaDaCompra]
 							END
 
 						SET @Count += 1
-					END
-			END
-	END
+					END;
+			END;
+	END;
 GO

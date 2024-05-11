@@ -1,7 +1,11 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER TRIGGER [dbo].[TRG_InserirApartamentosAutomaticamente]
 	ON [dbo].[Predio]
 	AFTER INSERT
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo fonte...: TRG_InserirApartamentosAutomaticamente.sql
@@ -67,13 +71,13 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_InserirApartamentosAutomaticamente]
 								ROLLBACK TRAN;
 								RAISERROR('Erro ao inserir apartamento', 16, 1);
 								RETURN;
-							END
+							END;
 						-- Incremento na variavel de contagem de apartamentos
 						SET @ContagemApartamento += 1;
-					END
+					END;
 
 				SET @ContagemApartamento = 1;
 				-- Incremento na variavel de contagem de pavimentos
 				SET @ContagemPavimento += 1;
-			END
-	END
+			END;
+	END;

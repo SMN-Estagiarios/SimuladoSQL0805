@@ -1,3 +1,5 @@
+USE DB_ConstrutoraLMNC;
+
 DECLARE @DataInicio DATETIME = GETDATE() - 10
 
 INSERT INTO [dbo].[Indice](Id, Nome) 

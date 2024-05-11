@@ -1,3 +1,7 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularValorParcela](
 															@ValorVenda DECIMAL(10,2),
 															@Financiado BIT,
@@ -35,5 +39,5 @@ CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularValorParcela](
 														  END
 														)
 		RETURN @ValorTotal
-	END
+	END;
 GO

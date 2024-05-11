@@ -1,10 +1,15 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
-	AS
+	
+AS
 	/*
 	Documentacao
 	Arquivo fonte............:	SPJOB_ReceberParcelas.sql
 	Objetivo.................:	Atualizar ao receber o pagamento de uma parcela.
-	Autor....................:	Danyel Targino
+	Autor....................:	Pedro Avelino
 	Data.....................:	10/05/2024
 	Ex.......................:	BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
@@ -69,19 +74,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 			com o id do lançamento
 
 			*/
-
-
-
-
-
-	END
-GO
-
-SELECT * FROM Compra
-SELECT * FROM TipoDespesa
-SELECT * FROM TipoLancamento
-SELECT * FROM Lancamento
-SELECT * FROM Parcela
+	END;
 
 GO
 
@@ -124,7 +117,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 									Juros DECIMAL(15,2),
 									Data_Cadastro DATE,
 									SaldoDisponivel DECIMAL(15,2)
-								)
+								);
 
 		-- Inserir valores nela
 		INSERT INTO #Tabela (	
@@ -136,7 +129,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 								Juros,
 								Data_Cadastro,
 								SaldoDisponivel
-							)
+							);
 			SELECT	p.Id,
 					ct.id,
 					v.id,
@@ -158,8 +151,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 						p.IdLancamento IS NULL
 
 
-			SELECT * FROM #Tabela
-			DROP TABLE #Tabela
+			SELECT * FROM #Tabela;
+			DROP TABLE #Tabela;
 		-- Verificar se existe algum registro onde o valor da parcela é maior que o disponivel
 		/* IF EXISTS (SELECT TOP 1 1
 							FROM #Tabela
@@ -197,19 +190,4 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 				AND [dbo].[FNC_CalcularSaldoAtualConta] (NULL, ct.SaldoInicial, ct.ValorCredito, ct.ValorDebito) >= p.Valor
 
 				*/
-	END
-
-
-
-	SELECT * FROM Lancamento
-	SELECT * FROM Parcela
-	insert into Parcela (IdVenda, IdJuros, Valor, DataVencimento ) VALUES(2,1,4000,GETDATE()-30)
-	SELECT * FROM Venda
-	select * from Apartamento
-	insert into Apartamento VALUES (1,200,10)
-	INSERT INTO Venda Values (1,1,1,2000, GETDATE(),1,2)
-	SELECT * FROM Juros
-	SELECT * FROM conta
-
-
-	update parcela set DataVencimento = getdate()
+	END;

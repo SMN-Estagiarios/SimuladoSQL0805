@@ -1,12 +1,16 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 	ON [dbo].[Lancamento]
 	FOR INSERT
-	AS
+AS
 	/*
 		DOCUMENTAÇÃO
 		Arquivo Fonte........:	TRG_AtualizarSaldoConta.sql
-		Objetivo.............:	Atualizar Saldo da tabela [dbo].[Conta]
-		Autor................:	Adriel Alexander
+		Objetivo.............:	Atualizar Saldo da tabela Conta
+		Autor................:	Pedro Avelino
 		Data.................:	10/05/2024
 		Ex...................:  BEGIN TRAN
 									DBCC DROPCLEANBUFFERS;
@@ -49,17 +53,20 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 								ROLLBACK TRAN
 	*/
 	BEGIN
+		
+		--Declaração das variáveis que serão utilizadas para armazenas o tipo de operação do lançamento;
 		DECLARE @Tipo_Lancamento CHAR(1),
 				@Data_Lanc DATETIME,
 				@Vlr_Lancamento DECIMAL(15,2),
 				@IdConta INT;
 
-		--ATRIBUINDO VALORES AS VARIÁVEIS 
+		--Atribuição dos valores das colunas na tabela INSERTED
 		SELECT	@Tipo_Lancamento = TipoOperacao,
 				@Data_Lanc = DataLancamento, 
 				@Vlr_Lancamento = Valor
-			FROM INSERTED
+			FROM INSERTED;
 
+		--Execução da atualização na tabela Conta com base nos dados do lançamento inserido
 		UPDATE [dbo].[Conta] 
 			SET ValorSaldoInicial = (CASE	WHEN @Data_Lanc < DataSaldo 
 										THEN ValorSaldoInicial + 
@@ -81,4 +88,4 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 									ELSE(ValorDebito + @Vlr_Lancamento)
 								END)
 			WHERE Id = @IdConta
-	END
+	END;

@@ -1,5 +1,10 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
-	AS
+
+AS
 	/*
 		Documentação
 		Arquivo Fonte.........:	SPJOB_GerarParcela.sql
@@ -56,5 +61,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 								WHERE	DATEPART(DAY, v.DataVenda) = DATEPART(DAY, @DataAtual) --Checar se está no dia de vencimento
 										AND DATEPART(MONTH, up.DataVencimento) = DATEPART(MONTH, @DataAtual) --Checar se está no mês do vencimento
 										AND DATEDIFF(MONTH, DataVenda, @DataAtual) <= TotalParcela -- Checar se ainda há parcelas em aberto
-	END
+	END;
 GO

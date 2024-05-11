@@ -1,7 +1,12 @@
-﻿CREATE OR ALTER TRIGGER [dbo].[TRG_GerarLancamentosTransferenciaEntreContas]
+﻿USE DB_ConstrutoraLMNC;
+
+GO
+
+CREATE OR ALTER TRIGGER [dbo].[TRG_GerarLancamentosTransferenciaEntreContas]
 ON [dbo].[Transferencia]
 FOR INSERT
-	AS
+
+AS
 		/*
 		DOCUMENTAÇÃO
 		Arquivo Fonte........:	TRG_GerarLancamentosTransferenciaEntreContas.sql
@@ -105,8 +110,7 @@ FOR INSERT
 					IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
 						BEGIN 
 							RAISERROR('Erro na inclusão do lancamento de Crédito', 16,1)
-						END
-				END
-
-	END
+						END;
+				END;
+	END;
 GO

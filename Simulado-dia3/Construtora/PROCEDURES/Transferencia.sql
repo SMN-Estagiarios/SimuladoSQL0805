@@ -1,3 +1,7 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 	@IdContaDebito INT,
 	@IdContaCredito INT,
@@ -8,7 +12,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 		Documentação
 		Arquivo Fonte.....: Transferencia.sql
 		Objetivo..........: Instanciar uma nova trasnferência entre contas
-		Autor.............: Adriel Alexander
+		Autor.............: Pedro Avelino
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
@@ -44,8 +48,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 
 	*/
 	BEGIN
-		--declaração de Variáveis
-		DECLARE @Data_Atual DATE = GETDATE()
+		--Declaração de Variáveis
+		DECLARE @Data_Atual DATETIME = GETDATE()
 		--Verifica se as contas Existem
 		IF NOT EXISTS	(
 							SELECT TOP 1 1
@@ -55,7 +59,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 						)
 			BEGIN
 				RETURN 1
-			END
+			END;
 
 		--Verifica se o valor da transferencia é inferior ao valor de saldo
 		IF(@VlrTransf > (SELECT [dbo].[FNC_CalcularSaldoAtualConta](@IdContaDebito, ValorSaldoInicial, ValorCredito,ValorDebito)
@@ -63,13 +67,13 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 										WHERE c.Id = @IdContaDebito )) 
 			BEGIN
 				RETURN 2
-			END
+			END;
 
-		--validacao de uma transferencia entre contas feitas para uma mesma conta 
+		--Validacao de uma transferencia entre contas feitas para uma mesma conta 
 		IF(@IdContaDebito = @IdContaCredito)
 			BEGIN 
 				RETURN 3
-			END
+			END;
 		--Gerar Inserts em transferência
 		ELSE
 			BEGIN
@@ -79,6 +83,6 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 													 (@IdContaCredito, @IdContaDebito,@VlrTransf,
 														@Nomereferencia, @Data_Atual)
 				RETURN 0
-			END
-	END
+			END;
+	END;
 GO

@@ -1,3 +1,7 @@
+USE DB_ConstrutoraLMNC;
+
+GO 
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_InserirPredio]
 	@Nome VARCHAR(40),
 	@CEP CHAR(8),
@@ -8,7 +12,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirPredio]
 	@Numero VARCHAR(4),
 	@TotalPavimento TINYINT,
 	@AptosPorAndar TINYINT
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo fonte...:	Predio.sql
@@ -82,7 +86,7 @@ GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_EntregarPredio]
 	@IdPredio INT
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo fonte...:	Predio.sql
@@ -123,12 +127,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_EntregarPredio]
 			SET Entregue = 1
 			WHERE Id = @IdPredio
 		RETURN 0
-	END
+	END;
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarPredio]
 	@IdPredio INT = NULL
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo fonte...:	Predio.sql
@@ -158,6 +162,6 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarPredio]
 				QuantidadeApartamentoPorPavimento,
 				Entregue
 			FROM [dbo].[Predio] WITH(NOLOCK)
-			WHERE Id = COALESCE(@IdPredio, Id)
-	END
+			WHERE Id = COALESCE(@IdPredio, Id);
+	END;
 GO

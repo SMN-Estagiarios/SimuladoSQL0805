@@ -1,4 +1,8 @@
-﻿CREATE OR ALTER PROCEDURE [dbo].[SP_CriarLancamento]
+﻿USE DB_ConstrutoraLMNC;
+
+GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_CriarLancamento]
 	@IdConta INT,
 	@IdTipo INT,
 	@IdTransferencia INT,
@@ -48,13 +52,13 @@
 		IF @Valor < 0
 			BEGIN
 				 RETURN 1
-			END
+			END;
 
 		--Verificando se o lançamento é com data futura.
 		IF @DataLancamento > DATEADD(MINUTE, DATEDIFF(MINUTE, @DataLancamento, @DataAtual), @DataLancamento)
 			BEGIN
 				 RETURN 2
-			END
+			END;
 
 		--Verificando se o lançamento é do mes anterior.
 		IF DATEDIFF(MONTH,@DataLancamento, @DataAtual) <> 0
@@ -85,5 +89,5 @@
 						)
 
 			RETURN 0
-	END
+	END;
 GO

@@ -1,6 +1,10 @@
-CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
+USE DB_ConstrutoraLMNC;
+
+GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_RelatorioAptoVendidos]
 	@IdVenda INT = NULL
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo Fonte.....: Venda.sql
@@ -48,7 +52,7 @@ CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
 					) AS x
 				INNER JOIN [dbo].[Venda] v WITH(NOLOCK)
 					ON x.IdVenda = v.Id;
-	END
+	END;
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
@@ -56,7 +60,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 	@IdApartamento INT,
 	@Valor DECIMAL(10,2),
 	@TotalParcela SMALLINT
-	AS
+AS
 	/*
 		Documentação
 		Arquivo Fonte.........:	Venda.sql
@@ -114,7 +118,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 						  
 		SET @IdJuros = CASE		WHEN @TotalParcela > 1 THEN 1
 								ELSE NULL
-					   END
+					   END;
 
 		--Checar se o apartamento já está vendido
 		IF EXISTS (SELECT TOP 1 1
@@ -123,7 +127,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 				  )
 			BEGIN
 				RETURN 1
-			END
+			END;
 		
 		--Inserir uma venda
 		INSERT INTO [dbo].[Venda](IdCliente, IdApartamento, IdIndice, Valor, DataVenda, Financiado, TotalParcela)
@@ -151,12 +155,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 			RETURN 3
 
 		RETURN 0
-	END
+	END;
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarVendas]
 	@IdCliente INT = NULL
-	AS
+AS
 	/*
 		Documentação
 		Arquivo Fonte.........:	Venda.sql
@@ -183,5 +187,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarVendas]
 				TotalParcela
 			FROM [dbo].[Venda] WITH(NOLOCK)
 			WHERE IdCliente = ISNULL(@IdCliente, IdCliente)
-	END
+	END;
 GO

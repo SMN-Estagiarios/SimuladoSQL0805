@@ -1,9 +1,13 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_InserirDespesa]	@IdTipo TINYINT,
 													@Descricao VARCHAR(200),
 													@Valor DECIMAL(10,2),
 													@DataVencimento DATE
 
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo Fonte.....: Despesa.sql
@@ -48,13 +52,13 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirDespesa]	@IdTipo TINYINT,
 			RETURN 2
 
 		RETURN 0
-	END
+	END;
 GO
 
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarDespesas]	
 	@DataInicio DATE = NULL,
 	@DataComparacao DATE = NULL
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo Fonte.....: Despesa.sql
@@ -84,5 +88,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarDespesas]
 				INNER JOIN [dbo].[TipoDespesa] td WITH(NOLOCK)
 					ON td.Id = d.IdTipo
 			WHERE DataVencimento BETWEEN ISNULL(@DataInicio, GETDATE()) AND ISNULL(@DataComparacao, GETDATE())
-	END
+	END;
 GO

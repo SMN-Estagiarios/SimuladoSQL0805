@@ -1,9 +1,13 @@
+USE DB_ConstrutoraLMNC;
+
+GO  
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]	
 	@Valor DECIMAL(10,2),
 	@DataCompra DATE,
 	@Descricao VARCHAR(500),
 	@Parcelas SMALLINT
-	AS
+AS
 	/*
 		Documentação
 		Arquivo Fonte.....: Compra.sql
@@ -49,5 +53,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 			RETURN 1
 
 		RETURN 0
-	END
+	END;
 GO

@@ -1,6 +1,10 @@
+USE DB_ConstrutoraLMNC;
+
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[SP_ListarParcelaVendas]
 	@IdVenda INT = NULL
-	AS
+AS
 	/*
 		Documentacao
 		Arquivo fonte............:	Parcela.sql
