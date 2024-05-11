@@ -46,15 +46,15 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_GerarParcela]
 
 		--Inserir parcelas de vendas em aberto
 		INSERT INTO [dbo].[Parcela](IdVenda, IdJuros, Valor, DataVencimento)
-							SELECT	v.Id,
-									1,
-									[dbo].[FNC_CalcularValorParcela](v.Valor, v.Financiado, v.TotalParcela, v.IdIndice),
-									DATEADD(MONTH, 1, @DataAtual)
-								FROM [dbo].[Venda] v WITH(NOLOCK)
-									INNER JOIN #UltimasParcelas up
-										ON v.Id = up.IdVenda
-								WHERE	DATEPART(DAY, v.DataVenda) = DATEPART(DAY, @DataAtual) --Checar se está no dia de vencimento
-										AND DATEPART(MONTH, up.DataVencimento) = DATEPART(MONTH, @DataAtual) --Checar se está no mês do vencimento
-										AND DATEDIFF(MONTH, DataVenda, @DataAtual) <= TotalParcela -- Checar se ainda há parcelas em aberto
+			SELECT	v.Id,
+					1,
+					[dbo].[FNC_CalcularValorParcela](v.Valor, v.Financiado, v.TotalParcela, v.IdIndice),
+					DATEADD(MONTH, 1, @DataAtual)
+				FROM [dbo].[Venda] v WITH(NOLOCK)
+					INNER JOIN #UltimasParcelas up
+						ON v.Id = up.IdVenda
+				WHERE	DATEPART(DAY, v.DataVenda) = DATEPART(DAY, @DataAtual) --Checar se está no dia de vencimento
+						AND DATEPART(MONTH, up.DataVencimento) = DATEPART(MONTH, @DataAtual) --Checar se está no mês do vencimento
+						AND DATEDIFF(MONTH, DataVenda, @DataAtual) <= TotalParcela -- Checar se ainda há parcelas em aberto
 	END
 GO

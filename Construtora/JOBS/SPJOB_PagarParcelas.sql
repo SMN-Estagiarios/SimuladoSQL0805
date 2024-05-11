@@ -1,10 +1,10 @@
-CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
+
+CREATE OR ALTER PROCEDURE [dbo].[SPJOB_PagarParcelas]
 	AS
 	/*
 	Documentacao
-	Arquivo fonte............:	SPJOB_ReceberParcelas.sql
-	Objetivo.................:	Gerar um lancamento de parcela ao chegar a data de desconto da mesma 
-								e atualizar o id de lancamento da parcela
+	Arquivo fonte............:	SPJOB_PagarParcelas.sql
+	Objetivo.................:	Inserir um lancamento de recebimento de parcela.
 	Autor....................:	Grupo de Estagiarios SMN
 	Data.....................:	10/05/2024
 	Ex.......................:	BEGIN TRAN
@@ -19,7 +19,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 
 									DECLARE	@DataInicio DATETIME = GETDATE();
 
-									EXEC [dbo].[SPJOB_ReceberParcelas]
+									EXEC [dbo].[SPJOB_PagarParcelas]
 
 									SELECT	DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
 
@@ -30,7 +30,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 										FROM [dbo].[Lancamento]
 								ROLLBACK TRAN
 	*/
-	BEGIN
+BEGIN
 		-- Declarando as variaveis
 		DECLARE	@IdLancamento INT,
 				@DataAtual DATETIME = GETDATE(),
@@ -59,11 +59,11 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 								DataLancamento	
 							)
 			SELECT	p.Id,
-					ct.Id,
+					0,
 					4,
-					'D',
+					'C',
 					p.Valor,
-					CONCAT('Pagamento da parcela ', p.Id),
+					CONCAT('Recebimento da parcela ', p.Id),
 					@DataAtual
 				FROM [dbo].[Parcela] p WITH(NOLOCK)
 					FULL JOIN [dbo].[Venda] v WITH(NOLOCK)
@@ -101,28 +101,12 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 						FROM #Tabela
 
 				SELECT	@Linha = @@ROWCOUNT,
-						@ERRO = @@ERROR,
-						@IdLancamento = SCOPE_IDENTITY();
+						@ERRO = @@ERROR
 
 				IF @ERRO <> 0 OR @Linha <> 1
 					BEGIN
 						ROLLBACK TRAN;
 						RAISERROR('Erro ao inserir lancamento', 16, 1);
-						RETURN;
-					END
-
-				-- Atualizar a tabela parcela
-				UPDATE [dbo].[Parcela]
-					SET IdLancamento = @IdLancamento
-					WHERE Id =	(
-									SELECT TOP 1 IdParcela
-										FROM #Tabela
-								);
-
-				IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
-					BEGIN
-						ROLLBACK TRAN;
-						RAISERROR('Erro ao atualizar o id de lancamento na parcela', 16, 1);
 						RETURN;
 					END
 

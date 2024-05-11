@@ -51,3 +51,47 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 		RETURN 0
 	END
 GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_GerarRelatorioContasAPagar]	
+	AS
+	/*
+		Documentação
+		Arquivo Fonte.....: Compra.sql
+		Objetivo..........: Gerar o relatorio de todas as contas que a empresa tem a pagar
+		Autor.............: Odlavir Florentino
+		Data..............: 10/05/2024
+		EX................:	BEGIN TRAN
+								DBCC DROPCLEANBUFFERS; 
+								DBCC FREEPROCCACHE;
+	
+								DECLARE	@Dat_init DATETIME = GETDATE(),
+												@RET INT
+
+								EXEC [dbo].[SP_GerarRelatorioContasAPagar]
+
+								SELECT	DATEDIFF(millisecond, @Dat_init, GETDATE()) AS TempoExecucao
+							ROLLBACK TRAN
+	*/
+	BEGIN
+		-- Recuperar parcelas que a empresa tem a pagar
+		SELECT	c.Id,
+				c.Descricao,
+				p.Valor,
+				p.IdJuros,
+				p.DataVencimento
+			FROM [dbo].[Compra] c WITH(NOLOCK)
+				INNER JOIN [dbo].[Parcela] p WITH(NOLOCK)
+					ON c.Id = p.IdCompra
+			WHERE p.IdLancamento IS NULL;
+
+		-- Recuperar que a empresa tem a pagar
+		SELECT	d.Id,
+				d.Descricao,
+				td.Nome,
+				d.Valor,
+				d.DataVencimento
+			FROM [dbo].[Despesa] d WITH(NOLOCK)
+				INNER JOIN [dbo].[TipoDespesa] td WITH(NOLOCK)
+					ON td.Id = d.IdTipo
+			WHERE d.DataVencimento > GETDATE();
+	END

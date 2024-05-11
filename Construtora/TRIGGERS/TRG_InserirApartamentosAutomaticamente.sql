@@ -6,7 +6,7 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_InserirApartamentosAutomaticamente]
 		Documentacao
 		Arquivo fonte...: TRG_InserirApartamentosAutomaticamente.sql
 		Objetivo........: Cria os registros de apartamentos assim que um predio e inserido
-		Autor...........: Grupo Estagiarios
+		Autor...........: Grupo de Estagiarios SMN
 		Data............: 10/05/2024
 		Exemplo.........:	BEGIN TRAN
 								SELECT *

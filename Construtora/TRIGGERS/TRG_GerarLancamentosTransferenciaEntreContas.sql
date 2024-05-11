@@ -5,9 +5,9 @@ FOR INSERT
 		/*
 		DOCUMENTAÇÃO
 		Arquivo Fonte........:	TRG_GerarLancamentosTransferenciaEntreContas.sql
-		Objetivo.............:	gera inserts na tabela de lancamentos mediante transferencias cadastradas 
+		Objetivo.............:	Gerar lancamentos ao registrar uma transferencia 
 								travado código para idTipo para transferencias = 1 
-		Autor................:	Adriel Alexander
+		Autor................:	Odlavir Florentino
 		Data.................:	10/05/2024
 		Ex...................:	BEGIN TRAN
 									DBCC DROPCLEANBUFFERS;
@@ -32,7 +32,7 @@ FOR INSERT
 	
 		*/
 	BEGIN
-			--Declaracao de Variáveis 
+			--Declaracao de variaveis 
 			DECLARE @IdTransferencia INT,
 					@IdContaCredito INT,
 					@IdContaDebito INT,
@@ -42,7 +42,7 @@ FOR INSERT
 					@TipoLancamento INT = 1, --id_tipolancamento travado em transferencia 
 					@IdLancamentoInserido INT
 
-	   		-- atribui��o de valores para casos de Insert
+	   		-- Atribuir valores para as variaveis
 			SELECT  @IdTransferencia = Id,
 					@IdContaCredito = IdContaCredito,
 					@IdContaDebito = IdContaDebito, 
@@ -77,7 +77,7 @@ FOR INSERT
 					--Verifica se houve erro ao inserir dados em Lancamentos 	
 					IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
 						BEGIN 
-							RAISERROR('Erro na inclusão do lancamento de Débito', 16,1)
+							RAISERROR('Erro na inclusão do lancamento de Debito', 16,1)
 						END
 
 					INSERT INTO Lancamento(	
@@ -101,7 +101,7 @@ FOR INSERT
 											@NomeReferencia 
 										)
 
-					--Verifica se houve erro ao inserir dados em Lancamentos 	
+					--Verifica se houve erro ao inserir dados em Lancamentos
 					IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
 						BEGIN 
 							RAISERROR('Erro na inclusão do lancamento de Crédito', 16,1)

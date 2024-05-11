@@ -5,8 +5,8 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 	/*
 		DOCUMENTAÇÃO
 		Arquivo Fonte........:	TRG_AtualizarSaldoConta.sql
-		Objetivo.............:	Atualizar Saldo da tabela [dbo].[Conta]
-		Autor................:	Adriel Alexander
+		Objetivo.............:	Atualizar Saldo da tabela Conta
+		Autor................:	Odlavir Florentino
 		Data.................:	10/05/2024
 		Ex...................:  BEGIN TRAN
 									DBCC DROPCLEANBUFFERS;
@@ -49,36 +49,36 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 								ROLLBACK TRAN
 	*/
 	BEGIN
-		DECLARE @Tipo_Lancamento CHAR(1),
-				@Data_Lanc DATETIME,
-				@Vlr_Lancamento DECIMAL(15,2),
+		DECLARE @TipoLancamento CHAR(1),
+				@DataLancamento DATETIME,
+				@ValorLancamento DECIMAL(15,2),
 				@IdConta INT;
 
 		--ATRIBUINDO VALORES AS VARIÁVEIS 
-		SELECT	@Tipo_Lancamento = TipoOperacao,
-				@Data_Lanc = DataLancamento, 
-				@Vlr_Lancamento = Valor
-			FROM INSERTED
+		SELECT	@TipoLancamento = TipoOperacao,
+				@DataLancamento = DataLancamento, 
+				@ValorLancamento = Valor
+			FROM inserted
 
 		UPDATE [dbo].[Conta] 
-			SET ValorSaldoInicial = (CASE	WHEN @Data_Lanc < DataSaldo 
+			SET ValorSaldoInicial = (CASE	WHEN @DataLancamento < DataSaldo 
 										THEN ValorSaldoInicial + 
-															(CASE WHEN @Tipo_Lancamento = 'C' 
-																THEN @Vlr_Lancamento
-																ELSE @Vlr_Lancamento* (-1)
+															(CASE WHEN @TipoLancamento = 'C' 
+																THEN @ValorLancamento
+																ELSE @ValorLancamento* (-1)
 																END)
 										ELSE ValorSaldoInicial 
 									END),
 
-				ValorCredito = (CASE WHEN @Data_Lanc < DataSaldo  OR @Tipo_Lancamento = 'D' 
+				ValorCredito = (CASE WHEN @DataLancamento < DataSaldo  OR @TipoLancamento = 'D' 
 									THEN ValorCredito
-									ELSE (ValorCredito + @Vlr_Lancamento) 
+									ELSE (ValorCredito + @ValorLancamento) 
 								END),
 
 
-				ValorDebito = (CASE	WHEN @Data_Lanc < DataSaldo  OR @Tipo_Lancamento = 'C' 
+				ValorDebito = (CASE	WHEN @DataLancamento < DataSaldo  OR @TipoLancamento = 'C' 
 									THEN ValorDebito
-									ELSE(ValorDebito + @Vlr_Lancamento)
+									ELSE(ValorDebito + @ValorLancamento)
 								END)
 			WHERE Id = @IdConta
 	END

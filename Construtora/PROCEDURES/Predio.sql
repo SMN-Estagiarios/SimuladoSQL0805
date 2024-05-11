@@ -132,7 +132,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarPredio]
 	/*
 		Documentacao
 		Arquivo fonte...:	Predio.sql
-		Objetivo........:	Atualiza atributo 'Entregue' do predio para TRUE
+		Objetivo........:	Listar o(s) predio(s) existentes
 		Autor...........:	Grupo Estagiarios
 		Data............:	10/05/2024
 		Ex..............:	DBCC DROPCLEANBUFFERS;

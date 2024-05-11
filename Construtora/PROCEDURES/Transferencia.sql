@@ -1,21 +1,22 @@
 CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 	@IdContaDebito INT,
 	@IdContaCredito INT,
-	@VlrTransf DECIMAL(15,2),
+	@ValorTransferencia DECIMAL(15,2),
 	@NomeReferencia VARCHAR(200)
 	AS
 	/* 
 		Documentação
 		Arquivo Fonte.....: Transferencia.sql
-		Objetivo..........: Instanciar uma nova trasnferência entre contas
-		Autor.............: Adriel Alexander
+		Objetivo..........: Realizar uma transferencia entre contas
+		Autor.............: Odlavir Florentino
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
-								DBCC FREEPROCCACHE;
+								DBCC FREEPROCCACHE
+								DBCC FREESYSTEMCACHE('ALL')
 
-								DECLARE @RET INT, 
-								@Dat_init DATETIME = GETDATE()
+								DECLARE @Retorno INT, 
+										@DATA_INI DATETIME = GETDATE()
 
 								SELECT *
 									FROM [dbo].[Conta] WITH(NOLOCK)
@@ -24,10 +25,10 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 										FROM [dbo].[Lancamento] WITH(NOLOCK)
 										ORDER BY DataLancamento DESC
 
-								EXEC @RET = [dbo].[SP_RealizarTransferencia] 1, 2, 2000, 'Teste'
+								EXEC @Retorno = [dbo].[SP_RealizarTransferencia] 1, 2, 1500, 'Pagamento do alugel'
 
-								SELECT	@RET AS Retorno,
-										DATEDIFF(millisecond, @Dat_init, GETDATE()) AS TempoExecucao
+								SELECT	@Retorno AS Retorno,
+										DATEDIFF(MILLISECOND, @DATA_INI, GETDATE()) AS TempoExecucao
 								
 								SELECT  *
 									FROM [dbo].[Conta] WITH(NOLOCK)
@@ -37,47 +38,47 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 									ORDER BY DataLancamento DESC
 							ROLLBACK TRAN
 
-		Retornos........: 0 - Sucesso  
-						  1 - Erro ao Transferir: Uma das contas não existe 
-						  2 - Erro ao Transferir: O Valor da Transferência é maior do que o disponível em conta 
-						  3 - Erro ao Transferir: Impossivel fazer trasnferência para a mesma conta
+							--- Retornos ---
+							00: Sucesso  
+							01: Erro, uma das contas não existe 
+							02: Erro, o valor da transferência é maior do que o disponível em conta 
+							03: Erro, nao e possivel realizar transferencia para a mesma conta
+							04: Erro, nao foi possivel realizar a transferencia
 
 	*/
 	BEGIN
-		--declaração de Variáveis
-		DECLARE @Data_Atual DATE = GETDATE()
-		--Verifica se as contas Existem
+		--Declaração de Variáveis
+		DECLARE @DataAtual DATETIME = GETDATE()
+
+		--Verifica se as contas existem
 		IF NOT EXISTS	(
 							SELECT TOP 1 1
 								FROM [dbo].[Conta] WITH(NOLOCK)
 								WHERE Id  = @IdContaCredito
 									OR Id = @IdContaDebito
 						)
-			BEGIN
-				RETURN 1
-			END
+			RETURN 1;
 
 		--Verifica se o valor da transferencia é inferior ao valor de saldo
-		IF(@VlrTransf > (SELECT [dbo].[FNC_CalcularSaldoAtualConta](@IdContaDebito, ValorSaldoInicial, ValorCredito,ValorDebito)
-										FROM [dbo].[Conta] c WITH (NOLOCK)
-										WHERE c.Id = @IdContaDebito )) 
-			BEGIN
-				RETURN 2
-			END
+		IF	(@ValorTransferencia >	(
+										SELECT [dbo].[FNC_CalcularSaldoAtualConta](@IdContaDebito, ValorSaldoInicial, ValorCredito, ValorDebito)
+											FROM [dbo].[Conta] c WITH (NOLOCK)
+											WHERE c.Id = @IdContaDebito 
+									)
+			)
+			RETURN 2;
 
-		--validacao de uma transferencia entre contas feitas para uma mesma conta 
-		IF(@IdContaDebito = @IdContaCredito)
-			BEGIN 
-				RETURN 3
-			END
-		--Gerar Inserts em transferência
+		--Validar se a transferencia e feita para a mesma conta
+		IF @IdContaDebito = @IdContaCredito
+			RETURN 3;
 		ELSE
 			BEGIN
-					INSERT INTO [dbo].[Transferencia](IdContaCredito,IdContaDebito, Valor, 
-														NomeHistorico,DataTransferencia)
-						VALUES						
-													 (@IdContaCredito, @IdContaDebito,@VlrTransf,
-														@Nomereferencia, @Data_Atual)
+				INSERT INTO [dbo].[Transferencia]	(IdContaCredito,IdContaDebito, Valor, NomeHistorico, DataTransferencia)
+					VALUES							(@IdContaCredito, @IdContaDebito,@ValorTransferencia, @Nomereferencia, @DataAtual)
+
+				IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
+					RETURN 4;
+
 				RETURN 0
 			END
 	END
