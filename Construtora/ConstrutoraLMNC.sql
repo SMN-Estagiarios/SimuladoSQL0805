@@ -134,8 +134,8 @@ CREATE TABLE Transferencia (
 	IdContaDebito INT NOT NULL, 
 	Valor DECIMAL (10,2) NOT NULL,
 	NomeHistorico VARCHAR (200) NOT NULL,
-	DataTransferencia DATETIME NOT NULL
-
+	DataTransferencia DATETIME NOT NULL,
+	Estorno BIT NOT NULL
 	CONSTRAINT PK_IdTransferencia PRIMARY KEY (Id),
 	CONSTRAINT FK_IdContaCredito_Transferencias FOREIGN KEY (IdContaCredito) REFERENCES Conta(Id),
 	CONSTRAINT FK_IdContaDebito_Transferencias FOREIGN KEY (IdContaDebito) REFERENCES Conta(Id)

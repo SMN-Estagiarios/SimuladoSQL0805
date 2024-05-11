@@ -26,7 +26,7 @@ CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta]	(
 			BEGIN
 				SELECT @ValorSldInicial = ValorSaldoInicial,
 					   @ValorCredito = ValorCredito,
-					   @ValorDebito = ValorDebito
+						   @ValorDebito = ValorDebito
 					FROM [dbo].[Conta] WITH(NOLOCK)
 					WHERE Id = @IdConta
 			END

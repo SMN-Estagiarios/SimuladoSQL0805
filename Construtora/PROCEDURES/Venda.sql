@@ -9,7 +9,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 		Arquivo Fonte.........:	Venda.sql
 		Objetivo..............:	Procedure para inserir uma nova venda
 								IdIndice 1 = INCC e 2 = IGPM
-		Autor.................:	Grupo dos Estagiarios SMN
+		Autor.................:	Grupo dos estagiarios SMN
 		Data..................:	10/05/2024
 		Ex....................:	BEGIN TRAN
 									DBCC FREEPROCCACHE
@@ -18,7 +18,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirVenda]
 									DECLARE @Ret INT,
 											@DataInicio DATETIME = GETDATE()
 
-									EXEC @Ret = [dbo].[SP_InserirVenda] 1, 4, 100, 60
+									EXEC @Ret = [dbo].[SP_InserirVenda] 1, 10, 100, 60
 									
 									SELECT	*
 										FROM [dbo].[Venda] WITH(NOLOCK)
@@ -133,40 +133,6 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarVendas]
 	END
 GO
 
-
-CREATE OR ALTER PROCEDURE [dbo].[SP_RelatorioAptoNaoVendidos]
-	AS
-	/*
-		Documentacao
-		Arquivo Fonte.....: Venda.sql
-		Objetivo..........: Listar todos os apartamentos com as informacoes de parcelas pagas, vencidas e vincendas
-		Autor.............: Adriel Alexander
-		Data..............: 10/05/2024
-		Ex................:	DBCC FREEPROCCACHE
-							DBCC DROPCLEANBUFFERS
-							DBCC FREESYSTEMCACHE('ALL')
-
-							DECLARE @DATA_INI DATETIME = GETDATE();
-
-							EXEC [dbo].[SP_RelatorioAptoNaoVendidos]
-
-							SELECT DATEDIFF(MILLISECOND, @DATA_INI, GETDATE()) AS TempoExecucao;
-	*/
-	BEGIN
-		SELECT	p.Nome AS Predio,
-				CONCAT(p.Logradouro, ', ', p.Numero, ', ', p.Bairro) AS Endereco,
-				a.Numero AS NumeroApartamento,
-				a.Pavimento AS Andar
-			FROM [dbo].[Apartamento] a WITH(NOLOCK)
-				INNER JOIN [dbo].[Predio] p
-					ON p.Id = a.IdPredio
-				LEFT JOIN [dbo].[Venda] v 
-					ON v.IdApartamento = a.Id
-			WHERE v.IdApartamento IS NULL
-	END
-GO
-
-
 CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
 	@IdVenda INT = NULL
 	AS
@@ -191,7 +157,7 @@ CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
 		DECLARE @DataAtual DATE = GETDATE();
 		
 		-- Recuperando dados da subquery e calculando tambem a quantidade de parcelas restantes
-		SELECT	v.Id AS IdVenda,
+		SELECT	v.IdApartamento AS IdVenda,
 				v.TotalParcela AS TotalParcela,
 				x.QuantidadeParcelaPaga AS QuantidadeParcelaPaga,
 				x.QuantidadeParcelaVencida AS QuantidadeParcelaVencida,
@@ -218,5 +184,37 @@ CREATE OR ALTER PROC [dbo].[SP_RelatorioAptoVendidos]
 				INNER JOIN [dbo].[Venda] v WITH(NOLOCK)
 					ON x.IdVenda = v.Id;
 	END
+GO
 
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_RelatorioAptoNaoVendidos]
+	AS
+	/*
+		Documentacao
+		Arquivo Fonte.....: Venda.sql
+		Objetivo..........: Listar todos os apartamentos com as informacoes de parcelas pagas, vencidas e vincendas
+		Autor.............: Adriel Alexander de Sousa
+		Data..............: 10/05/2024
+		Ex................:	DBCC FREEPROCCACHE
+							DBCC DROPCLEANBUFFERS
+							DBCC FREESYSTEMCACHE('ALL')
+
+							DECLARE @DATA_INI DATETIME = GETDATE();
+
+							EXEC [dbo].[SP_RelatorioAptoNaoVendidos]
+
+							SELECT DATEDIFF(MILLISECOND, @DATA_INI, GETDATE()) AS TempoExecucao;
+	*/
+	BEGIN
+		SELECT	p.Nome AS Predio,
+				CONCAT(p.Logradouro, ', ', p.Numero, ', ', p.Bairro) AS Endereco,
+				a.Pavimento AS PavimentoApto,
+				a.Numero AS NumeroApartamento
+			FROM [dbo].[Apartamento] a WITH(NOLOCK)
+				LEFT JOIN [dbo].[Venda] v 
+					ON v.IdApartamento = a.Id
+				INNER JOIN [dbo].[Predio] p
+					ON p.Id = a.IdPredio
+			WHERE v.IdApartamento IS NULL
+	END
 GO

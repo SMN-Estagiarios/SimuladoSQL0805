@@ -17,35 +17,68 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 								DECLARE @RET INT, 
 								@Dat_init DATETIME = GETDATE()
 
-								SELECT *
-									FROM [dbo].[Conta] WITH(NOLOCK)
+								SELECT Id,
+								       IdCliente,
+									   ValorSaldoInicial,
+									   ValorCredito,
+									   ValorDebito,
+									   DataSaldo,
+									   DataAbertura,
+									   DataEncerramento
+									   FROM [dbo].[Conta] WITH(NOLOCK)
 	
-								SELECT TOP 20 *
+								SELECT TOP 20 Id,
+											  IdConta,
+											  IdTipo,
+											  IdTransferencia,
+											  IdDespesa,
+											  TipoOperacao,
+											  Valor,
+											  NomeHistorico,
+										      DataLancamento
 										FROM [dbo].[Lancamento] WITH(NOLOCK)
 										ORDER BY DataLancamento DESC
 
 								EXEC @RET = [dbo].[SP_RealizarTransferencia] 1, 2, 2000, 'Teste'
 
-								SELECT	@RET AS Retorno,
-										DATEDIFF(millisecond, @Dat_init, GETDATE()) AS TempoExecucao
-								
-								SELECT  *
-									FROM [dbo].[Conta] WITH(NOLOCK)
+								SELECT @RET AS RETORNO,
+									   DATEDIFF(MILLISECOND,@Dat_init, GETDATE()) AS EXECUÇÂO
 
-								SELECT TOP 20 *
-									FROM [dbo].[Lancamento] WITH(NOLOCK)
-									ORDER BY DataLancamento DESC
+
+								SELECT Id,
+								       IdCliente,
+									   ValorSaldoInicial,
+									   ValorCredito,
+									   ValorDebito,
+									   DataSaldo,
+									   DataAbertura,
+									   DataEncerramento
+									   FROM [dbo].[Conta] WITH(NOLOCK)
+	
+								SELECT TOP 20 Id,
+											  IdConta,
+											  IdTipo,
+											  IdTransferencia,
+											  IdDespesa,
+											  TipoOperacao,
+											  Valor,
+											  NomeHistorico,
+										      DataLancamento
+										FROM [dbo].[Lancamento] WITH(NOLOCK)
+										ORDER BY DataLancamento DESC
+
 							ROLLBACK TRAN
 
 		Retornos........: 0 - Sucesso  
 						  1 - Erro ao Transferir: Uma das contas não existe 
 						  2 - Erro ao Transferir: O Valor da Transferência é maior do que o disponível em conta 
-						  3 - Erro ao Transferir: Impossivel fazer trasnferência para a mesma conta
+						  3 - Erro ao Transferir: Impossivel fazer trasnferência para a mesma conta,
+						  4 - Erro ao Transferir: Erro no processamento do insert
 
 	*/
 	BEGIN
 		--declaração de Variáveis
-		DECLARE @Data_Atual DATE = GETDATE()
+		DECLARE @Data_Atual DATETIME = GETDATE()
 		--Verifica se as contas Existem
 		IF NOT EXISTS	(
 							SELECT TOP 1 1
@@ -63,7 +96,7 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 										WHERE c.Id = @IdContaDebito )) 
 			BEGIN
 				RETURN 2
-			END
+			END 
 
 		--validacao de uma transferencia entre contas feitas para uma mesma conta 
 		IF(@IdContaDebito = @IdContaCredito)
@@ -78,6 +111,11 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_RealizarTransferencia]
 						VALUES						
 													 (@IdContaCredito, @IdContaDebito,@VlrTransf,
 														@Nomereferencia, @Data_Atual)
+			   --Erro ao processar o insert de transferencia
+			   IF @@ERROR <> 0 OR @@ROWCOUNT <> 1
+					BEGIN
+						RETURN 4
+					END
 				RETURN 0
 			END
 	END

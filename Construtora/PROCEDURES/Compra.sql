@@ -44,7 +44,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 		--Inserir dados na entidade Compra.
 		INSERT INTO [dbo].[Compra](Valor,DataCompra,Descricao,TotalParcela)
 			VALUES(@Valor, @DataCompra, @Descricao, @Parcelas)
-	
+		
+		--Verifica se houve insert na tabela de Compra
 		IF @@ERROR <> 0 OR @@ROWCOUNT = 0
 			RETURN 1
 

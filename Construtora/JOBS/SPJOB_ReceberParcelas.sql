@@ -77,11 +77,6 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 	END
 GO
 
-SELECT * FROM Compra
-SELECT * FROM TipoDespesa
-SELECT * FROM TipoLancamento
-SELECT * FROM Lancamento
-SELECT * FROM Parcela
 
 GO
 
@@ -160,56 +155,5 @@ CREATE OR ALTER PROCEDURE [dbo].[SPJOB_ReceberParcelas]
 
 			SELECT * FROM #Tabela
 			DROP TABLE #Tabela
-		-- Verificar se existe algum registro onde o valor da parcela é maior que o disponivel
-		/* IF EXISTS (SELECT TOP 1 1
-							FROM #Tabela
-							WHERE (Valor + Juros) > SaldoDisponivel)
-			BEGIN
-				-- Gerar juros para a parcela
-				UPDATE [dbo].[Parcela]
-					SET Juros = [dbo].[FNC_CalcularJurosAtrasoParcela](Id_Emprestimo, Valor,  DAY(DATEDIFF(DAY, Data_Vencimento, @DataAtual)))
-				WHERE	Data_Vencimento <= @DataAtual AND
-						Id_Lancamento IS NULL
 
-				RETURN 1
-			END */
-
-
-
-
-
-			/*
-
-			SELECT	ct.Id,
-					4,
-				'D',
-				p.valor,
-				CONCAT('Pagamento de fatura ', p.Id),
-				@DataAtual
-			FROM [dbo].[Parcela] p WITH (NOLOCK)
-				INNER JOIN [dbo].[Venda] v WITH (NOLOCK)
-					ON v.Id = p.IdVenda
-				INNER JOIN [dbo].[Cliente] c WITH (NOLOCK)
-					ON c.Id = v.IdCliente
-				INNER JOIN [dbo].[Conta] ct WITH (NOLOCK)
-					ON ct.IdCliente = c.Id
-			WHERE DATEDIFF(DAY, @DataAtual, p.DataVencimento) 
-				AND [dbo].[FNC_CalcularSaldoAtualConta] (NULL, ct.SaldoInicial, ct.ValorCredito, ct.ValorDebito) >= p.Valor
-
-				*/
 	END
-
-
-
-	SELECT * FROM Lancamento
-	SELECT * FROM Parcela
-	insert into Parcela (IdVenda, IdJuros, Valor, DataVencimento ) VALUES(2,1,4000,GETDATE()-30)
-	SELECT * FROM Venda
-	select * from Apartamento
-	insert into Apartamento VALUES (1,200,10)
-	INSERT INTO Venda Values (1,1,1,2000, GETDATE(),1,2)
-	SELECT * FROM Juros
-	SELECT * FROM conta
-
-
-	update parcela set DataVencimento = getdate()

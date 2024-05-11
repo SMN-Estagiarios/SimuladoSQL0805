@@ -25,11 +25,8 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_InserirPredio]
 								SELECT * FROM Predio
 								SELECT * FROM Apartamento
 
-<<<<<<< Updated upstream
 								EXEC @RET = [dbo].[SP_InserirPredio] 'SoBalanca', '58025147', 'PB', 'Jampa', 'Cuia', 'Rua das Flores', '420', 3, 3
-=======
-							EXEC @RET [dbo].[SP_InserirPredio] 'SoBalanca', '58025147', 'PB', 'Jampa', 'Cuia', 'Rua das Flores', '420', 3, 3
->>>>>>> Stashed changes
+
 
 								SELECT * FROM Apartamento
 								SELECT * FROM Predio
