@@ -7,10 +7,10 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarFluxoDeCaixa]
 	@DataTermino DATE = NULL
 AS
 	/*
-		Documenta��o
+		Documentacao
 		Arquivo Fonte.....: FluxoCaixa.sql
-		Objetivo..........: Lista o fluxo de caixa di�rio da Construtora id da conta travado como 0 (Conta da construtora)
-		Autor.............: Grupo Estagi�rios SMN
+		Objetivo..........: Lista o fluxo de caixa diario da Construtora id da conta travado como 0 (Conta da construtora)
+		Autor.............: Grupo Estagiarios SMN
 		Data..............: 10/05/2024
 		Ex................: BEGIN TRAN
 								DBCC DROPCLEANBUFFERS;
@@ -26,14 +26,14 @@ AS
 	*/
 	 BEGIN
 
-		-- Vari�veis de tempo
+		-- Variaveis de tempo
 		DECLARE @DataAtual DATE = GETDATE(),
 				@MesPassado DATE;
 
-		-- Data do m�s passado
+		-- Data do mes passado
 		SET @MesPassado = DATEADD(MONTH, -1, @DataAtual);
 
-		-- Se data in�cio for nulo, usar o dia 1 do m�s passado
+		-- Se data inicio for nulo, usar o dia 1 do mes passado
 		IF @DataInicio IS NULL	
 			BEGIN
 				SET @DataInicio = DATEFROMPARTS(YEAR(@MesPassado), MONTH(@MesPassado), 1);

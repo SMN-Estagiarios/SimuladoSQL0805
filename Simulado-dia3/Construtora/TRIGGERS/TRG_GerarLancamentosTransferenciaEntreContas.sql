@@ -8,7 +8,7 @@ FOR INSERT
 
 AS
 		/*
-		DOCUMENTAÇÃO
+		DOCUMENTACAO
 		Arquivo Fonte........:	TRG_GerarLancamentosTransferenciaEntreContas.sql
 		Objetivo.............:	Gerar inserções na tabela 'Lancamento' mediante transferencias cadastradas 
 								travado código para idTipo para transferencias = 1 
@@ -58,7 +58,7 @@ AS
 
 			IF @IdTransferencia IS NOT NULL
 				BEGIN	
-					--inserção do lancamento para a conta que esta transferindo 
+					--insercao do lancamento para a conta que esta transferindo 
 					INSERT INTO Lancamento(	
 											IdConta,
 											IdTipo,
