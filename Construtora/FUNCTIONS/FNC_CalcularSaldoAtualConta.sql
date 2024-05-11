@@ -1,6 +1,6 @@
 CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta](
 														 @IdConta INT = NULL, 
-														 @ValorSldInicial DECIMAL(10,2) = NULL, 
+														 @ValorSaldoInicial DECIMAL(10,2) = NULL, 
 														 @ValorCredito DECIMAL(10,2) = NULL, 
 														 @ValorDebito DECIMAL(10,2) = NULL
 														)
@@ -9,29 +9,33 @@ CREATE OR ALTER FUNCTION [dbo].[FNC_CalcularSaldoAtualConta](
 	 /*
 		Documentação
 		Arquivo Fonte.....: FNC_CalcularSaldoAtualConta.sql
-		Objetivo..........: Listar o saldo atual de todas as contas ou uma conta especifica na tabela Conta
-		Autor.............: Adriel Alexsander 
+		Objetivo..........: Listar o saldo atual de uma ou de todas as contas
+		Autor.............: João Victor Maia
  		Data..............: 10/05/2024
 		Ex................: 
 							DBCC DROPCLEANBUFFERS;
 							DBCC FREEPROCCACHE;
 								
 							DECLARE @Dat_ini DATETIME = GETDATE()
+
 							SELECT	[dbo].[FNC_CalcularSaldoAtual](NULL,200,500,100) AS Resultado,
 									DATEDIFF(millisecond, @Dat_ini, GETDATE()) AS Tempo_Execucao	
 	*/
 	BEGIN
-		  --Verificar ID nulo
+
+		  --Verificar se o Id existe
 		IF(@IdConta IS NOT NULL)
-			--Recuperar Valores 
+
+			--Atribuir valores às variáveis
 			BEGIN
-				SELECT @ValorSldInicial = ValorSaldoInicial,
+				SELECT @ValorSaldoInicial = ValorSaldoInicial,
 					   @ValorCredito = ValorCredito,
 					   @ValorDebito = ValorDebito
 					FROM [dbo].[Conta] WITH(NOLOCK)
 					WHERE Id = @IdConta
 			END
-			--Caso do Id nulo, vai usar os demais valores passados como parâmetros
-		RETURN @ValorSldInicial + @ValorCredito - @ValorDebito
+
+			--Caso O Id seja nulo, irá calcular através dos parâmetros
+		RETURN @ValorSaldoInicial + @ValorCredito - @ValorDebito
 	END
 GO

@@ -86,4 +86,4 @@ INSERT INTO [dbo].[Lancamento](IdConta, IdTipo, TipoOperacao, Valor, NomeHistori
 --Parcela
 INSERT INTO [dbo].[Parcela](IdVenda, IdCompra, IdJuros, IdLancamento, Valor, DataVencimento)
 					VALUES (1, NULL, 1, NULL, 1250.00, '2024-06-20'),
-						   (NULL, 1, 1, 3, 1000.00, '2024-06-05')
+						   (NULL, 1, 1, 3, 1000.00, '2024-06-05')						  

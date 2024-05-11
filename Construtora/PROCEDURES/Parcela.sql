@@ -5,17 +5,17 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarParcelaVendas]
 	Documentacao
 	Arquivo fonte............:	Parcela.sql
 	Objetivo.................:	Listar as parcelas da venda.
-	Autor....................:	Danyel Targino
+	Autor....................:	Grupo
 	Data.....................:	10/05/2024
 	Ex.......................:	BEGIN TRAN
-								DBCC DROPCLEANBUFFERS;
-								DBCC FREEPROCCACHE;
+									DBCC DROPCLEANBUFFERS;
+									DBCC FREEPROCCACHE;
 
-								DECLARE	@DataInicio DATETIME = GETDATE()
+									DECLARE	@DataInicio DATETIME = GETDATE()
 
-								EXEC [dbo].[SP_ListarParcelaVendas] 1
+									EXEC [dbo].[SP_ListarParcelaVendas] 1
 
-								SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+									SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
 								
 								ROLLBACK TRAN
 	*/
@@ -41,17 +41,17 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarParcelaCompras]
 	Documentacao
 	Arquivo fonte............:	Parcela.sql
 	Objetivo.................:	Listar as parcelas da venda.
-	Autor....................:	Danyel Targino
+	Autor....................:	Grupo
 	Data.....................:	10/05/2024
 	Ex.......................:	BEGIN TRAN
-								DBCC DROPCLEANBUFFERS;
-								DBCC FREEPROCCACHE;
+									DBCC DROPCLEANBUFFERS;
+									DBCC FREEPROCCACHE;
 
-								DECLARE	@DataInicio DATETIME = GETDATE()
+									DECLARE	@DataInicio DATETIME = GETDATE()
 
-								EXEC [dbo].[SP_ListarParcelaCompras] 1
+									EXEC [dbo].[SP_ListarParcelaCompras] 1
 
-								SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+									SELECT DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
 								
 								ROLLBACK TRAN
 	*/
@@ -67,5 +67,45 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_ListarParcelaCompras]
 			FROM [dbo].[Parcela] WITH (NOLOCK)
 			WHERE IdCompra = ISNULL(@IdCompra, IdCompra)
 
-	END;
+	END
+GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_ListarContasReceber]
+	AS
+	/*
+	Documentacao
+	Arquivo fonte............:	Parcela.sql
+	Objetivo.................:	Procedure para listar todas as parcelas ainda não pagas pelo cliente
+	Autor....................:	João Victor Maia
+	Data.....................:	10/05/2024
+	Ex.......................:	BEGIN TRAN
+									DBCC FREEPROCCACHE
+									DBCC DROPCLEANBUFFERS
+
+									DECLARE	@Ret INT,
+											@DataInicio DATETIME = GETDATE()
+
+									EXEC [dbo].[SP_ListarContasReceber]
+
+									SELECT	@Ret AS Retorno,
+											DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+								
+								ROLLBACK TRAN
+	Retornos.................:	0 - Sucesso
+	*/
+	BEGIN
+
+		--Listar as parcelas não pagas
+		SELECT	Id,
+				IdVenda,
+				IdCompra,
+				IdJuros,
+				IdLancamento,
+				Valor,
+				DataVencimento
+			FROM [dbo].[Parcela] WITH(NOLOCK)
+			WHERE IdLancamento IS NULL
+
+		RETURN 0
+	END
 GO

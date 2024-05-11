@@ -60,12 +60,48 @@ CREATE OR ALTER PROCEDURE [dbo].[SP_GerarCompra]
 	*/		
 	BEGIN
 		--Inserir dados na entidade Compra.
-		INSERT INTO [dbo].[Compra](Valor,DataCompra,Descricao,TotalParcela)
-			VALUES(@Valor,@DataCompra,@Descricao,@Parcelas)
+		INSERT INTO [dbo].[Compra](Valor,DataCompra,Descricao)
+			VALUES(@Valor,@DataCompra,@Descricao)
 	
 		IF @@ERROR <> 0 OR @@ROWCOUNT = 0
 			RETURN 1
 
 		RETURN 0
+	END
+GO
+
+CREATE OR ALTER PROCEDURE [dbo].[SP_ListarComprasAbertas]
+	AS
+	/*
+		Documentação
+		Arquivo Fonte.....: Compra.sql
+		Objetivo..........: Procedure para listar todas as compras não pagas pela empresa
+		Autor.............: João Victor Maia
+		Data..............: 10/05/2024
+		Ex................:	BEGIN TRAN
+								DBCC DROPCLEANBUFFERS; 
+								DBCC FREEPROCCACHE;
+	
+								DECLARE	@Ret INT,
+										@DataInicio DATETIME = GETDATE()
+
+								EXEC @Ret = [dbo].[SP_ListarComprasAbertas]
+
+								SELECT @RET AS Retorno,
+											DATEDIFF(MILLISECOND, @DataInicio, GETDATE()) AS TempoExecucao
+							ROLLBACK TRAN
+		Retornos..........:	0 - Sucesso
+	*/
+	BEGIN
+
+		--Listar as compras não pagas
+		SELECT	c.Id,
+				c.Valor,
+				c.DataCompra,
+				c.Descricao
+			FROM [dbo].[Compra] c WITH(NOLOCK)
+				LEFT JOIN [dbo].[Parcela] p WITH(NOLOCK)
+					ON c.Id = p.IdCompra
+			WHERE p.Id IS NULL
 	END
 GO
