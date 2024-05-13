@@ -80,5 +80,5 @@ CREATE OR ALTER TRIGGER [dbo].[TRG_AtualizarSaldoConta]
 									THEN ValorDebito
 									ELSE(ValorDebito + @Vlr_Lancamento)
 								END)
-			WHERE Id = @IdConta
+			WHERE Id = (SELECT IdConta FROM inserted)
 	END

@@ -52,6 +52,9 @@ AS
 				@DataTransferencia = DataTransferencia   
 			FROM inserted 		
 
+
+
+
 		IF @IdTransferencia IS NOT NULL
 			BEGIN	
 				--inserção do lancamento para a conta que esta transferindo 
@@ -108,6 +111,6 @@ AS
 						RAISERROR('Erro na inclusão do lancamento de Crédito', 16,1)
 					END
 			END
-
+			
 	END
 GO

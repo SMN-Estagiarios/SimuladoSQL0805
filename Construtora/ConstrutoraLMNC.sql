@@ -136,10 +136,13 @@ CREATE TABLE Transferencia (
 	NomeHistorico VARCHAR (200) NOT NULL,
 	DataTransferencia DATETIME NOT NULL,
 	Estorno BIT NOT NULL
+
 	CONSTRAINT PK_IdTransferencia PRIMARY KEY (Id),
 	CONSTRAINT FK_IdContaCredito_Transferencias FOREIGN KEY (IdContaCredito) REFERENCES Conta(Id),
 	CONSTRAINT FK_IdContaDebito_Transferencias FOREIGN KEY (IdContaDebito) REFERENCES Conta(Id)
 );
+
+
 
 CREATE TABLE TipoLancamento (
 	Id TINYINT,
